@@ -36,12 +36,6 @@ tasks {
 <p>阿里巴巴Java编码规范检查插件。修复了一些官方一直未修复的Bug。如 <a href="https://github.com/alibaba/p3c/issues/898">issues-898</a>,<a href="https://github.com/alibaba/p3c/issues/900">issues-900</a></p>
 <p>官方插件地址：<a href="https://plugins.jetbrains.com/plugin/10046-alibaba-java-coding-guidelines">Alibaba Java Coding Guidelines</a></p>
 
-<h2>捐赠(Donate)</h2>
-<pre>
-你的馈赠将助力我更好的去贡献，谢谢！
-Your gift will help me to contribute better, thank you!
-
-<a href="https://paypal.me/godfather1103?locale.x=zh_XC">PayPal</a>
         """)
         changeNotes.set("""
         <ul>
