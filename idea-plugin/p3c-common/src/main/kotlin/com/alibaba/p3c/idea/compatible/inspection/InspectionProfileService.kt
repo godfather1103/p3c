@@ -17,7 +17,7 @@ package com.alibaba.p3c.idea.compatible.inspection
 
 import com.alibaba.smartfox.idea.common.util.PluginVersions
 import com.google.common.collect.Sets
-import com.intellij.codeInspection.ex.GlobalInspectionContextImpl
+import com.intellij.codeInspection.ex.GlobalInspectionContextBase
 import com.intellij.codeInspection.ex.InspectionManagerEx
 import com.intellij.codeInspection.ex.InspectionProfileImpl
 import com.intellij.codeInspection.ex.InspectionToolWrapper
@@ -27,7 +27,6 @@ import com.intellij.openapi.util.WriteExternalException
 import com.intellij.profile.codeInspection.InspectionProjectProfileManager
 import com.intellij.psi.PsiElement
 import org.jdom.Element
-import java.util.LinkedHashSet
 
 /**
  *
@@ -103,7 +102,8 @@ object InspectionProfileService {
     }
 
     fun setExternalProfile(profile: InspectionProfileImpl,
-            inspectionContext: GlobalInspectionContextImpl) {
+            inspectionContext: GlobalInspectionContextBase
+    ) {
         val method = inspectionContext.javaClass.methods.first {
             it.name == "setExternalProfile" && it.parameterTypes.size == 1 && it.parameterTypes.first().isAssignableFrom(InspectionProfileImpl::class.java)
         }
