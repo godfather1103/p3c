@@ -36,11 +36,7 @@ import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.EmptyRunnable
 import com.intellij.openapi.util.NotNullLazyValue
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiBinaryFile
-import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiManager
-import com.intellij.psi.SingleRootFileViewProvider
+import com.intellij.psi.*
 import com.intellij.psi.search.LocalSearchScope
 import com.intellij.psi.search.SearchScope
 import com.intellij.psi.util.PsiUtilCore
@@ -52,7 +48,7 @@ import com.intellij.util.ReflectionUtil
 import com.intellij.util.containers.ContainerUtil
 import gnu.trove.THashSet
 import net.sourceforge.pmd.RuleViolation
-import java.util.Queue
+import java.util.*
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.Future
@@ -231,11 +227,14 @@ class PmdGlobalInspectionContextImpl(
                     val fileIndex: FileIndex = ProjectRootManager.getInstance(project).fileIndex
                     scope.accept { file: VirtualFile? ->
                         ProgressManager.checkCanceled()
-                        if (isProjectOrWorkspaceFile(file!!) || !fileIndex.isInContent(file)) return@accept true
+                        val flag = ReadAction.compute<Boolean,Exception> {
+                            isProjectOrWorkspaceFile(file!!) || !fileIndex.isInContent(file)
+                        }
+                        if (flag) return@accept true
                         val psiFile =
                             ReadAction.compute<PsiFile?, RuntimeException> {
                                 if (project.isDisposed) throw ProcessCanceledException()
-                                val psi = PsiManager.getInstance(project).findFile(file)
+                                val psi = PsiManager.getInstance(project).findFile(file!!)
                                 val document =
                                     psi?.let { shouldProcess(it, headlessEnvironment, localScopeFiles) }
                                 if (document != null) {
