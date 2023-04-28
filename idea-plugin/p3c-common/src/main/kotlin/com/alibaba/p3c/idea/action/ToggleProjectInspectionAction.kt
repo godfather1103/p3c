@@ -22,7 +22,6 @@ import com.alibaba.p3c.idea.i18n.P3cBundle
 import com.alibaba.p3c.idea.inspection.AliBaseInspection
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.components.ServiceManager
 import icons.P3cIcons
 
 /**
@@ -37,7 +36,7 @@ class ToggleProjectInspectionAction : AnAction() {
 
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
-        val smartFoxConfig = ServiceManager.getService(project, SmartFoxProjectConfig::class.java)
+        val smartFoxConfig = project.getService(SmartFoxProjectConfig::class.java)
         val tools = Inspections.aliInspections(project) {
             it.tool is AliBaseInspection
         }
@@ -47,7 +46,7 @@ class ToggleProjectInspectionAction : AnAction() {
 
     override fun update(e: AnActionEvent) {
         val project = e.project ?: return
-        val smartFoxConfig = ServiceManager.getService(project, SmartFoxProjectConfig::class.java)
+        val smartFoxConfig = project.getService(SmartFoxProjectConfig::class.java)
         e.presentation.text = if (smartFoxConfig.projectInspectionClosed) {
             e.presentation.icon = P3cIcons.PROJECT_INSPECTION_ON
             P3cBundle.getMessage("$textKey.open")
