@@ -46,7 +46,6 @@ import com.intellij.util.IncorrectOperationException
 import com.intellij.util.Processor
 import com.intellij.util.ReflectionUtil
 import com.intellij.util.containers.ContainerUtil
-import gnu.trove.THashSet
 import net.sourceforge.pmd.RuleViolation
 import java.util.*
 import java.util.concurrent.ArrayBlockingQueue
@@ -112,7 +111,7 @@ class PmdGlobalInspectionContextImpl(
                             logger.info(file.name + "; scope: " + scope + "; " + virtualFile)
                             return@tryRunReadActionInSmartMode true
                         }
-                        val path = virtualFile.canonicalPath?.toLowerCase() ?: ""
+                        val path = virtualFile.canonicalPath?.lowercase() ?: ""
                         if (!path.endsWith(".java") && !path.endsWith(".vm")) {
                             return@tryRunReadActionInSmartMode true
                         }
@@ -128,7 +127,7 @@ class PmdGlobalInspectionContextImpl(
         val headlessEnvironment = ApplicationManager.getApplication().isHeadlessEnvironment
         val searchScope =
             ApplicationManager.getApplication().runReadAction<SearchScope, RuntimeException> { scope.toSearchScope() }
-        val localScopeFiles: MutableSet<VirtualFile>? = if (searchScope is LocalSearchScope) THashSet() else null
+        val localScopeFiles: MutableSet<VirtualFile>? = if (searchScope is LocalSearchScope) HashSet() else null
         val filesToInspect: BlockingQueue<PsiFile> = ArrayBlockingQueue(1000)
         val iteratingIndicator: ProgressIndicator = SensitiveProgressWrapper(progressIndicator)
         val future: Future<*> = startIterateScopeInBackground(
@@ -227,7 +226,7 @@ class PmdGlobalInspectionContextImpl(
                     val fileIndex: FileIndex = ProjectRootManager.getInstance(project).fileIndex
                     scope.accept { file: VirtualFile? ->
                         ProgressManager.checkCanceled()
-                        val flag = ReadAction.compute<Boolean,Exception> {
+                        val flag = ReadAction.compute<Boolean, Exception> {
                             isProjectOrWorkspaceFile(file!!) || !fileIndex.isInContent(file)
                         }
                         if (flag) return@accept true
