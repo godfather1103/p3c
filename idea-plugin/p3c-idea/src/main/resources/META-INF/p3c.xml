@@ -2,12 +2,9 @@
     <applicationListeners>
         <listener class="com.alibaba.p3c.idea.listener.CommonSettingsApplicationListener"
                   topic="com.intellij.ide.AppLifecycleListener"/>
+        <listener class="com.alibaba.p3c.idea.listener.MyProjectStartupActivity"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
-    <project-components>
-        <component>
-            <implementation-class>com.alibaba.p3c.idea.component.AliProjectComponent</implementation-class>
-        </component>
-    </project-components>
     <actions>
         <action class="com.alibaba.p3c.idea.action.AliInspectionAction" id="AliP3CInspectionAction"
                 popup="true" text="编码规约扫描" icon="P3cIcons.ANALYSIS_ACTION">
@@ -47,5 +44,6 @@
         <checkinHandlerFactory implementation="com.alibaba.p3c.idea.vcs.AliCodeAnalysisCheckinHandlerFactory"
                                order="first"/>
         <inspectionToolProvider implementation="com.alibaba.p3c.idea.inspection.AliLocalInspectionToolProvider"/>
+        <postStartupActivity implementation="com.alibaba.p3c.idea.listener.MyProjectStartupActivity"/>
     </extensions>
 </idea-plugin>
