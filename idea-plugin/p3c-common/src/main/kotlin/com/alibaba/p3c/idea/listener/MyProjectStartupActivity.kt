@@ -3,124 +3,35 @@ package com.alibaba.p3c.idea.listener
 import com.alibaba.p3c.idea.compatible.inspection.Inspections
 import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.i18n.P3cBundle
-import com.alibaba.p3c.idea.inspection.AliPmdInspectionInvoker
-import com.alibaba.p3c.idea.pmd.SourceCodeProcessor
-import com.alibaba.p3c.idea.util.withLockNotInline
+import com.alibaba.p3c.idea.service.FileListenerService
 import com.alibaba.p3c.pmd.I18nResources
 import com.alibaba.smartfox.idea.common.util.getService
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
 import com.intellij.openapi.startup.ProjectActivity
-import com.intellij.openapi.vfs.*
-import com.intellij.psi.PsiManager
-import net.sourceforge.pmd.RuleViolation
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.locks.ReentrantReadWriteLock
 
 class MyProjectStartupActivity : ProjectActivity, ProjectManagerListener {
 
-    private lateinit var listener: VirtualFileListener
-    private val javaExtension = ".java"
-    private val velocityExtension = ".vm"
-
-    private val lock = ReentrantReadWriteLock()
-    private val readLock = lock.readLock()
-    private val writeLock = lock.writeLock()
-
-    private val fileContexts = ConcurrentHashMap<String, FileContext>()
     private val p3cConfig = P3cConfig::class.java.getService()
 
-    private fun initListener(project: Project) {
-        listener = object : VirtualFileListener {
-            override fun contentsChanged(event: VirtualFileEvent) {
-                val path = getFilePath(event) ?: return
-                PsiManager.getInstance(project).findFile(event.file) ?: return
-                if (!p3cConfig.ruleCacheEnable) {
-                    AliPmdInspectionInvoker.refreshFileViolationsCache(event.file)
-                }
-                if (!p3cConfig.astCacheEnable) {
-                    SourceCodeProcessor.invalidateCache(path)
-                }
-                SourceCodeProcessor.invalidUserTrigger(path)
-                fileContexts[path]?.ruleViolations = null
-            }
-
-            override fun fileDeleted(event: VirtualFileEvent) {
-                val path = getFilePath(event)
-                path?.let {
-                    SourceCodeProcessor.invalidateCache(it)
-                    removeFileContext(it)
-                }
-                super.fileDeleted(event)
-            }
-
-            override fun fileMoved(event: VirtualFileMoveEvent) {
-                val path = getFilePath(event)
-                path?.let {
-                    SourceCodeProcessor.invalidateCache(it)
-                    removeFileContext(it)
-                }
-                super.fileMoved(event)
-            }
-
-            private fun getFilePath(event: VirtualFileEvent): String? {
-                val path = event.file.canonicalPath
-                if (path == null || !(path.endsWith(javaExtension) || path.endsWith(velocityExtension))) {
-                    return null
-                }
-                return path
-            }
-        }
-    }
-
     override suspend fun execute(project: Project) {
-        initListener(project)
         I18nResources.changeLanguage(p3cConfig.locale)
         val analyticsGroup = ActionManager.getInstance().getAction(analyticsGroupId)
         analyticsGroup.templatePresentation.text = P3cBundle.getMessage(analyticsGroupText)
         Inspections.addCustomTag(project, "date")
-        VirtualFileManager.getInstance().addVirtualFileListener(listener, project)
+        val fileService = project.getService(FileListenerService::class.java)
+        fileService.projectOpened(project)
     }
 
-
     override fun projectClosed(project: Project) {
-        VirtualFileManager.getInstance().removeVirtualFileListener(listener)
+        val fileService = project.getService(FileListenerService::class.java)
+        fileService.projectClosed(project)
     }
 
     companion object {
-        val analyticsGroupId = "com.alibaba.p3c.analytics.action_group"
-        val analyticsGroupText = "$analyticsGroupId.text"
+        const val analyticsGroupId = "com.alibaba.p3c.analytics.action_group"
+        const val analyticsGroupText = "$analyticsGroupId.text"
     }
 
-    data class FileContext(
-        val lock: ReentrantReadWriteLock,
-        var ruleViolations: Map<String, List<RuleViolation>>? = null
-    )
-
-    fun removeFileContext(path: String) {
-        fileContexts.remove(path)
-    }
-
-    fun getFileContext(virtualFile: VirtualFile?): FileContext? {
-        val file = virtualFile?.canonicalPath ?: return null
-        val result = readLock.withLockNotInline {
-            fileContexts[file]
-        }
-        if (result != null) {
-            return result
-        }
-        return writeLock.withLockNotInline {
-            val finalContext = fileContexts[file]
-            if (finalContext != null) {
-                return@withLockNotInline finalContext
-            }
-            val lock = ReentrantReadWriteLock()
-            FileContext(
-                lock = lock
-            ).also {
-                fileContexts[file] = it
-            }
-        }
-    }
 }

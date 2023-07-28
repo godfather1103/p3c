@@ -15,9 +15,9 @@
  */
 package com.alibaba.p3c.idea.inspection
 
-import com.alibaba.p3c.idea.component.AliProjectComponent
 import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.pmd.AliPmdProcessor
+import com.alibaba.p3c.idea.service.FileListenerService
 import com.alibaba.p3c.idea.util.DocumentUtils.calculateLineStart
 import com.alibaba.p3c.idea.util.DocumentUtils.calculateRealOffset
 import com.alibaba.p3c.idea.util.ProblemsUtils
@@ -55,7 +55,7 @@ class AliPmdInspectionInvoker(
         Thread.currentThread().contextClassLoader = javaClass.classLoader
         val processor = AliPmdProcessor(rule)
         val start = System.currentTimeMillis()
-        val aliProjectComponent = manager.project.getComponent(AliProjectComponent::class.java)
+        val aliProjectComponent = manager.project.getService(FileListenerService::class.java)
         val fileContext = aliProjectComponent.getFileContext(psiFile.virtualFile)
         val ruleViolations = fileContext?.ruleViolations
         violations = if (isOnTheFly || ruleViolations == null) {
@@ -65,7 +65,7 @@ class AliPmdInspectionInvoker(
         }
         logger.debug(
             "elapsed ${System.currentTimeMillis() - start}ms to" +
-                " to apply rule ${rule.name} for file ${psiFile.virtualFile.canonicalPath}"
+                    " to apply rule ${rule.name} for file ${psiFile.virtualFile.canonicalPath}"
         )
     }
 

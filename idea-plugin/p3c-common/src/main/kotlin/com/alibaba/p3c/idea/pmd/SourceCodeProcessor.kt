@@ -4,8 +4,8 @@
 
 package com.alibaba.p3c.idea.pmd
 
-import com.alibaba.p3c.idea.component.AliProjectComponent.FileContext
 import com.alibaba.p3c.idea.config.P3cConfig
+import com.alibaba.p3c.idea.service.FileListenerService
 import com.alibaba.p3c.idea.util.withLockNotInline
 import com.alibaba.p3c.idea.util.withTryLock
 import com.google.common.cache.Cache
@@ -13,11 +13,7 @@ import com.google.common.cache.CacheBuilder
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.Document
-import net.sourceforge.pmd.PMD
-import net.sourceforge.pmd.PMDConfiguration
-import net.sourceforge.pmd.PMDException
-import net.sourceforge.pmd.RuleContext
-import net.sourceforge.pmd.RuleSets
+import net.sourceforge.pmd.*
 import net.sourceforge.pmd.benchmark.TimeTracker
 import net.sourceforge.pmd.benchmark.TimedOperationCategory
 import net.sourceforge.pmd.lang.Language
@@ -33,7 +29,7 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 class SourceCodeProcessor(
     private val configuration: PMDConfiguration,
     private val document: Document,
-    private val fileContext: FileContext,
+    private val fileContext: FileListenerService.FileContext,
     private val isOnTheFly: Boolean
 ) {
 

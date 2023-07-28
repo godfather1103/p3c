@@ -1,10 +1,10 @@
 package com.alibaba.p3c.idea.action
 
-import com.alibaba.p3c.idea.component.AliProjectComponent
 import com.alibaba.p3c.idea.ep.InspectionActionExtensionPoint
 import com.alibaba.p3c.idea.inspection.AliLocalInspectionToolProvider
 import com.alibaba.p3c.idea.inspection.PmdRuleInspectionIdentify
 import com.alibaba.p3c.idea.pmd.AliPmdProcessor
+import com.alibaba.p3c.idea.service.FileListenerService
 import com.intellij.analysis.AnalysisScope
 import com.intellij.codeInsight.daemon.ProblemHighlightFilter
 import com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator
@@ -96,7 +96,7 @@ class PmdGlobalInspectionContextImpl(
         progressIndicator: ProgressIndicator,
         isOfflineInspections: Boolean
     ) {
-        val aliProjectComponent = project.getComponent(AliProjectComponent::class.java)
+        val aliProjectComponent = project.getService(FileListenerService::class.java)
         // run pmd inspection
         val processor = Processor { file: PsiFile ->
             ProgressManager.checkCanceled()
@@ -297,7 +297,7 @@ class PmdGlobalInspectionContextImpl(
 
     private fun doPmdProcess(
         file: PsiFile,
-        aliProjectComponent: AliProjectComponent,
+        aliProjectComponent: FileListenerService,
         virtualFile: VirtualFile
     ) {
         val url: String = displayUrlRelativeToProject(

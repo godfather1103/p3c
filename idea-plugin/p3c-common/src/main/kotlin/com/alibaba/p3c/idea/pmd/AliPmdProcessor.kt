@@ -15,22 +15,14 @@
  */
 package com.alibaba.p3c.idea.pmd
 
-import com.alibaba.p3c.idea.component.AliProjectComponent
+import com.alibaba.p3c.idea.service.FileListenerService
 import com.google.common.base.Throwables
 import com.intellij.openapi.application.ex.ApplicationUtil
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.psi.PsiFile
-import net.sourceforge.pmd.PMDConfiguration
-import net.sourceforge.pmd.PMDException
-import net.sourceforge.pmd.Report
-import net.sourceforge.pmd.Rule
-import net.sourceforge.pmd.RuleContext
-import net.sourceforge.pmd.RuleSetFactory
-import net.sourceforge.pmd.RuleSets
-import net.sourceforge.pmd.RuleViolation
-import net.sourceforge.pmd.RulesetsFactoryUtils
+import net.sourceforge.pmd.*
 import net.sourceforge.pmd.util.ResourceLoader
 import java.io.IOException
 import java.io.StringReader
@@ -56,7 +48,7 @@ class AliPmdProcessor private constructor(val rule: Rule? = null, val ruleSets: 
         configuration.inputPaths = psiFile.virtualFile.canonicalPath
         val document = FileDocumentManager.getInstance().getDocument(psiFile.virtualFile) ?: return emptyList()
         val project = psiFile.project
-        val aliProjectComponent = project.getComponent(AliProjectComponent::class.java)
+        val aliProjectComponent = project.getService(FileListenerService::class.java)
         val fileContext = aliProjectComponent.getFileContext(psiFile.virtualFile) ?: return emptyList()
         val ctx = RuleContext()
         val niceFileName = psiFile.virtualFile.canonicalPath!!
