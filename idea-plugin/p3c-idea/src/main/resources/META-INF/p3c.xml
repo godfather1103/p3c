@@ -1,9 +1,8 @@
 <idea-plugin>
-    <application-components>
-        <component>
-            <implementation-class>com.alibaba.p3c.idea.component.CommonSettingsApplicationComponent</implementation-class>
-        </component>
-    </application-components>
+    <applicationListeners>
+        <listener class="com.alibaba.p3c.idea.listener.CommonSettingsApplicationListener"
+                  topic="com.intellij.ide.AppLifecycleListener"/>
+    </applicationListeners>
     <project-components>
         <component>
             <implementation-class>com.alibaba.p3c.idea.component.AliProjectComponent</implementation-class>
