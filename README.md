@@ -1,3 +1,16 @@
+## 安装前请卸载已安装的官方插件避免冲突。
+
+# 前言
+
+因为阿里官方长时间未修复相关bug，所以只能fork一份，修复在使用过程中遇到的bug。
+
+- fork节点为[6c59c8c3](https://github.com/alibaba/p3c/commit/6c59c8c36ecd8722c712d5685b8c3822c1c8b030)
+
+# 已修复的issues
+
+- [issues-898](https://github.com/alibaba/p3c/issues/898)
+- [issues-900](https://github.com/alibaba/p3c/issues/900)
+
 # P3C
 
 最新版本：黄山版（2022.2.3发布）
