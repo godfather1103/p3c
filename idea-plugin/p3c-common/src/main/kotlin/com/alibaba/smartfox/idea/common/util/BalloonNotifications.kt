@@ -15,8 +15,7 @@
  */
 package com.alibaba.smartfox.idea.common.util
 
-import com.intellij.notification.NotificationDisplayType
-import com.intellij.notification.NotificationGroup
+import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationListener
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.progress.ProcessCanceledException
@@ -33,11 +32,19 @@ import java.net.UnknownHostException
  * @date 2017/05/08
  */
 object BalloonNotifications {
-    val displayId = "SmartFox Intellij IDEA Balloon Notification"
-    val balloonGroup = NotificationGroup(displayId, NotificationDisplayType.BALLOON, true)
 
-    val stickyBalloonDisplayId = "SmartFox Intellij IDEA Notification"
-    val stickyBalloonGroup = NotificationGroup(stickyBalloonDisplayId, NotificationDisplayType.STICKY_BALLOON, true)
+    const val displayId = "SmartFox Intellij IDEA Balloon Notification"
+
+    val balloonGroup = NotificationGroupManager
+        .getInstance()
+        .getNotificationGroup(displayId)
+
+    const val stickyBalloonDisplayId = "SmartFox Intellij IDEA Notification"
+
+    val stickyBalloonGroup = NotificationGroupManager
+        .getInstance()
+        .getNotificationGroup(stickyBalloonDisplayId)
+
     val TITLE = "SmartFox Intellij IDEA Plugin"
 
     fun showInfoDialog(component: Component, title: String, message: String) {
@@ -55,36 +62,49 @@ object BalloonNotifications {
         Messages.showErrorDialog(component, getErrorTextFromException(e), title)
     }
 
-    fun showSuccessNotification(message: String, project: Project? = ProjectManager.getInstance().defaultProject,
-            title: String = TITLE, sticky: Boolean = false) {
+    fun showSuccessNotification(
+        message: String, project: Project? = ProjectManager.getInstance().defaultProject,
+        title: String = TITLE, sticky: Boolean = false
+    ) {
         showNotification(message, project, title, NotificationType.INFORMATION, null, sticky)
     }
 
-    fun showWarnNotification(message: String, project: Project? = ProjectManager.getInstance().defaultProject,
-            title: String = TITLE, sticky: Boolean = false) {
+    fun showWarnNotification(
+        message: String, project: Project? = ProjectManager.getInstance().defaultProject,
+        title: String = TITLE, sticky: Boolean = false
+    ) {
         showNotification(message, project, title, NotificationType.WARNING, null, sticky)
     }
 
-    fun showErrorNotification(message: String, project: Project? = ProjectManager.getInstance().defaultProject,
-            title: String = TITLE, sticky: Boolean = false) {
+    fun showErrorNotification(
+        message: String, project: Project? = ProjectManager.getInstance().defaultProject,
+        title: String = TITLE, sticky: Boolean = false
+    ) {
         showNotification(message, project, title, NotificationType.ERROR, null, sticky)
     }
 
-    fun showSuccessNotification(message: String, project: Project?,
-            notificationListener: NotificationListener, title: String = TITLE, sticky: Boolean = false) {
+    fun showSuccessNotification(
+        message: String, project: Project?,
+        notificationListener: NotificationListener,
+        title: String = TITLE,
+        sticky: Boolean = false
+    ) {
         showNotification(message, project, title, NotificationType.INFORMATION, notificationListener, sticky)
     }
 
-    fun showNotification(message: String, project: Project? = ProjectManager.getInstance().defaultProject,
-            title: String = TITLE,
-            notificationType: NotificationType = NotificationType.INFORMATION,
-            notificationListener: NotificationListener? = null, sticky: Boolean = false) {
+    fun showNotification(
+        message: String, project: Project? = ProjectManager.getInstance().defaultProject,
+        title: String = TITLE,
+        notificationType: NotificationType = NotificationType.INFORMATION,
+        notificationListener: NotificationListener? = null,
+        sticky: Boolean = false
+    ) {
         val group = if (sticky) {
             stickyBalloonGroup
         } else {
             balloonGroup
         }
-        group.createNotification(title, message, notificationType, notificationListener).notify(project)
+        group.createNotification(title, message, notificationType).notify(project)
     }
 
     private fun isOperationCanceled(e: Exception): Boolean {
@@ -99,13 +119,3 @@ object BalloonNotifications {
     }
 }
 
-object LogNotifications {
-    val group = NotificationGroup(BalloonNotifications.displayId, NotificationDisplayType.NONE, true)
-
-    fun log(message: String, project: Project? = ProjectManager.getInstance().defaultProject,
-            title: String = BalloonNotifications.TITLE,
-            notificationType: NotificationType = NotificationType.INFORMATION,
-            notificationListener: NotificationListener? = null) {
-        group.createNotification(title, message, notificationType, notificationListener).notify(project)
-    }
-}

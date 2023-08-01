@@ -20,12 +20,12 @@ import com.alibaba.p3c.idea.compatible.inspection.Inspections
 import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.inspection.AliBaseInspection
 import com.alibaba.smartfox.idea.common.util.BalloonNotifications
+import com.alibaba.smartfox.idea.common.util.getService
 import com.intellij.analysis.AnalysisScope
 import com.intellij.codeInspection.InspectionManager
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ex.InspectionManagerEx
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.openapi.progress.ProgressIndicator
@@ -49,8 +49,7 @@ import com.intellij.ui.NonFocusableCheckBox
 import com.intellij.util.ExceptionUtil
 import com.intellij.util.PairConsumer
 import java.awt.BorderLayout
-import java.util.ArrayList
-import java.util.Arrays
+import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import javax.swing.JComponent
@@ -90,8 +89,6 @@ class AliCodeAnalysisCheckinHandler(
                 return panel
             }
 
-            override fun refresh() {}
-
             override fun saveState() {
                 getSettings().analysisBeforeCheckin = checkBox.isSelected
             }
@@ -103,7 +100,7 @@ class AliCodeAnalysisCheckinHandler(
     }
 
     private fun getSettings(): P3cConfig {
-        return ServiceManager.getService(P3cConfig::class.java)
+        return P3cConfig::class.java.getService()
     }
 
     override fun beforeCheckin(

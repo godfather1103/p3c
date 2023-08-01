@@ -35,8 +35,10 @@ import org.jdom.Element
  * @date 2017/03/01
  */
 object InspectionProfileService {
-    fun createSimpleProfile(toolWrapperList: List<InspectionToolWrapper<*, *>>,
-            managerEx: InspectionManagerEx, psiElement: PsiElement?): InspectionProfileImpl {
+    fun createSimpleProfile(
+        toolWrapperList: List<InspectionToolWrapper<*, *>>,
+        managerEx: InspectionManagerEx, psiElement: PsiElement?
+    ): InspectionProfileImpl {
         val profile = getProjectInspectionProfile(managerEx.project)
         val allWrappers: LinkedHashSet<InspectionToolWrapper<*, *>> = Sets.newLinkedHashSet()
         allWrappers.addAll(toolWrapperList)
@@ -51,6 +53,7 @@ object InspectionProfileService {
                 method.invoke(null, "Alibaba Coding Guidelines", managerEx.project, allWrappers.toList())
                         as InspectionProfileImpl
             }
+
             PluginVersions.baseVersion163 -> {
                 val method = profile.javaClass.methods.first {
                     it.name == "createSimple"
@@ -58,6 +61,7 @@ object InspectionProfileService {
                 method.invoke(null, "Alibaba Coding Guidelines", managerEx.project, allWrappers.toList())
                         as InspectionProfileImpl
             }
+
             else -> {
                 val method = profile.javaClass.methods.first {
                     it.name == "createSimple"
@@ -101,16 +105,18 @@ object InspectionProfileService {
         profile.scopesChanged()
     }
 
-    fun setExternalProfile(profile: InspectionProfileImpl,
-            inspectionContext: GlobalInspectionContextBase
+    fun setExternalProfile(
+        profile: InspectionProfileImpl,
+        inspectionContext: GlobalInspectionContextBase
     ) {
         val method = inspectionContext.javaClass.methods.first {
-            it.name == "setExternalProfile" && it.parameterTypes.size == 1 && it.parameterTypes.first().isAssignableFrom(InspectionProfileImpl::class.java)
+            it.name == "setExternalProfile" && it.parameterTypes.size == 1 && it.parameterTypes.first()
+                .isAssignableFrom(InspectionProfileImpl::class.java)
         }
         method.invoke(inspectionContext, profile)
     }
 
     fun getProjectInspectionProfile(project: Project): InspectionProfileImpl {
-        return InspectionProjectProfileManager.getInstance(project).inspectionProfile as InspectionProfileImpl
+        return InspectionProjectProfileManager.getInstance(project).currentProfile
     }
 }

@@ -8,9 +8,9 @@ import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.service.FileListenerService
 import com.alibaba.p3c.idea.util.withLockNotInline
 import com.alibaba.p3c.idea.util.withTryLock
+import com.alibaba.smartfox.idea.common.util.getService
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.Document
 import net.sourceforge.pmd.*
@@ -226,7 +226,7 @@ class SourceCodeProcessor(
     }
 
     companion object {
-        val smartFoxConfig = ServiceManager.getService(P3cConfig::class.java)!!
+        val smartFoxConfig = P3cConfig::class.java.getService()
         private lateinit var onlyTheFlyCache: Cache<String, Node>
         private lateinit var userTriggerNodeCache: Cache<String, Node>
         private val LOG = Logger.getInstance(SourceCodeProcessor::class.java)

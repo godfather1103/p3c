@@ -22,12 +22,12 @@ import com.alibaba.p3c.idea.util.DocumentUtils.calculateLineStart
 import com.alibaba.p3c.idea.util.DocumentUtils.calculateRealOffset
 import com.alibaba.p3c.idea.util.ProblemsUtils
 import com.alibaba.p3c.pmd.lang.java.rule.comment.RemoveCommentedCodeRule
+import com.alibaba.smartfox.idea.common.util.getService
 import com.beust.jcommander.internal.Lists
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import com.intellij.codeInspection.InspectionManager
 import com.intellij.codeInspection.ProblemDescriptor
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.vfs.LocalFileSystem
@@ -106,7 +106,7 @@ class AliPmdInspectionInvoker(
 
     companion object {
         private lateinit var invokers: Cache<FileRule, AliPmdInspectionInvoker>
-        val smartFoxConfig = ServiceManager.getService(P3cConfig::class.java)!!
+        val smartFoxConfig = P3cConfig::class.java.getService()
 
         init {
             reInitInvokers(smartFoxConfig.ruleCacheTime)
