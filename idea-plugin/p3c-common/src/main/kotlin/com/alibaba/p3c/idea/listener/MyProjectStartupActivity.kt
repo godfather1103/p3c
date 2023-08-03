@@ -38,7 +38,7 @@ class MyProjectStartupActivity : ProjectActivity, ProjectManagerListener {
 
     override fun projectClosed(project: Project) {
         val fileService = project.getService(FileListenerService::class.java)
-        fileService.projectClosed(project)
+        fileService.projectClosed()
     }
 
     companion object {

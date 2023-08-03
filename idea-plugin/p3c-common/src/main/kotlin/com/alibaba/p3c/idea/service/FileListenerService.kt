@@ -8,14 +8,24 @@ import com.alibaba.smartfox.idea.common.util.getService
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.*
+import com.intellij.openapi.vfs.newvfs.events.VFileContentChangeEvent
+import com.intellij.openapi.vfs.newvfs.events.VFileDeleteEvent
+import com.intellij.openapi.vfs.newvfs.events.VFileEvent
+import com.intellij.openapi.vfs.newvfs.events.VFileMoveEvent
 import com.intellij.psi.PsiManager
 import net.sourceforge.pmd.RuleViolation
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
+interface IFileListenerService {
+    fun contentsChanged(event: VFileContentChangeEvent)
+    fun fileDeleted(event: VFileDeleteEvent)
+    fun fileMoved(event: VFileMoveEvent)
+}
+
 @Service(Service.Level.PROJECT)
-class FileListenerService(val project: Project) {
-    private val listener: VirtualFileListener
+class FileListenerService(val project: Project) : IFileListenerService {
+    private val asyncListener: AsyncFileListener
     private val javaExtension = ".java"
     private val velocityExtension = ".vm"
 
@@ -28,54 +38,27 @@ class FileListenerService(val project: Project) {
     private val p3cConfig = P3cConfig::class.java.getService()
 
     init {
-        listener = object : VirtualFileListener {
-            override fun contentsChanged(event: VirtualFileEvent) {
-                val path = getFilePath(event) ?: return
-                PsiManager.getInstance(project).findFile(event.file) ?: return
-                if (!p3cConfig.ruleCacheEnable) {
-                    AliPmdInspectionInvoker.refreshFileViolationsCache(event.file)
+        asyncListener = AsyncFileListener {
+            object : AsyncFileListener.ChangeApplier {
+                override fun afterVfsChange() {
+                    it.forEach { event ->
+                        when (event) {
+                            is VFileContentChangeEvent -> contentsChanged(event)
+                            is VFileDeleteEvent -> fileDeleted(event)
+                            is VFileMoveEvent -> fileMoved(event)
+                        }
+                    }
                 }
-                if (!p3cConfig.astCacheEnable) {
-                    SourceCodeProcessor.invalidateCache(path)
-                }
-                SourceCodeProcessor.invalidUserTrigger(path)
-                fileContexts[path]?.ruleViolations = null
-            }
-
-            override fun fileDeleted(event: VirtualFileEvent) {
-                val path = getFilePath(event)
-                path?.let {
-                    SourceCodeProcessor.invalidateCache(it)
-                    removeFileContext(it)
-                }
-                super.fileDeleted(event)
-            }
-
-            override fun fileMoved(event: VirtualFileMoveEvent) {
-                val path = getFilePath(event)
-                path?.let {
-                    SourceCodeProcessor.invalidateCache(it)
-                    removeFileContext(it)
-                }
-                super.fileMoved(event)
-            }
-
-            private fun getFilePath(event: VirtualFileEvent): String? {
-                val path = event.file.canonicalPath
-                if (path == null || !(path.endsWith(javaExtension) || path.endsWith(velocityExtension))) {
-                    return null
-                }
-                return path
             }
         }
     }
 
     fun projectOpened(project: Project) {
-        VirtualFileManager.getInstance().addVirtualFileListener(listener, project)
+        VirtualFileManager.getInstance().addAsyncFileListener(asyncListener, project)
     }
 
-    fun projectClosed(project: Project) {
-        VirtualFileManager.getInstance().removeVirtualFileListener(listener)
+    fun projectClosed() {
+        fileContexts.clear()
     }
 
     data class FileContext(
@@ -83,7 +66,7 @@ class FileListenerService(val project: Project) {
         var ruleViolations: Map<String, List<RuleViolation>>? = null
     )
 
-    fun removeFileContext(path: String) {
+    private fun removeFileContext(path: String) {
         fileContexts.remove(path)
     }
 
@@ -106,6 +89,41 @@ class FileListenerService(val project: Project) {
             ).also {
                 fileContexts[file] = it
             }
+        }
+    }
+
+    private fun getFilePath(event: VFileEvent): String? {
+        val path = event.file?.canonicalPath
+        if (path == null || !(path.endsWith(javaExtension) || path.endsWith(velocityExtension))) {
+            return null
+        }
+        return path
+    }
+
+    override fun contentsChanged(event: VFileContentChangeEvent) {
+        val path = getFilePath(event) ?: return
+        PsiManager.getInstance(project).findFile(event.file) ?: return
+        if (!p3cConfig.ruleCacheEnable) {
+            AliPmdInspectionInvoker.refreshFileViolationsCache(event.file)
+        }
+        if (!p3cConfig.astCacheEnable) {
+            SourceCodeProcessor.invalidateCache(path)
+        }
+        SourceCodeProcessor.invalidUserTrigger(path)
+        fileContexts[path]?.ruleViolations = null
+    }
+
+    override fun fileDeleted(event: VFileDeleteEvent) {
+        getFilePath(event)?.let {
+            SourceCodeProcessor.invalidateCache(it)
+            removeFileContext(it)
+        }
+    }
+
+    override fun fileMoved(event: VFileMoveEvent) {
+        getFilePath(event)?.let {
+            SourceCodeProcessor.invalidateCache(it)
+            removeFileContext(it)
         }
     }
 }
