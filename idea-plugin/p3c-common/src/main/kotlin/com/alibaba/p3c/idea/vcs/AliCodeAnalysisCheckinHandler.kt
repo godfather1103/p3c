@@ -15,7 +15,7 @@
  */
 package com.alibaba.p3c.idea.vcs
 
-import com.alibaba.p3c.idea.action.AliInspectionAction
+import com.alibaba.p3c.idea.action.AliPmdCodeInspectionAction
 import com.alibaba.p3c.idea.compatible.inspection.Inspections
 import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.inspection.AliBaseInspection
@@ -49,7 +49,6 @@ import com.intellij.ui.NonFocusableCheckBox
 import com.intellij.util.ExceptionUtil
 import com.intellij.util.PairConsumer
 import java.awt.BorderLayout
-import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import javax.swing.JComponent
@@ -106,9 +105,9 @@ class AliCodeAnalysisCheckinHandler(
     override fun beforeCheckin(
         executor: CommitExecutor?,
         additionalDataConsumer: PairConsumer<Any, Any>
-    ): CheckinHandler.ReturnResult {
+    ): ReturnResult {
         if (!getSettings().analysisBeforeCheckin) {
-            return CheckinHandler.ReturnResult.COMMIT
+            return ReturnResult.COMMIT
         }
         if (DumbService.getInstance(myProject).isDumb) {
             if (Messages.showOkCancelDialog(
@@ -117,9 +116,9 @@ class AliCodeAnalysisCheckinHandler(
                     waitingText, commitText, null
                 ) == Messages.OK
             ) {
-                return CheckinHandler.ReturnResult.CANCEL
+                return ReturnResult.CANCEL
             }
-            return CheckinHandler.ReturnResult.COMMIT
+            return ReturnResult.COMMIT
         }
 
         val virtualFiles = CheckinHandlerUtil.filterOutGeneratedAndExcludedFiles(myCheckinPanel.virtualFiles, myProject)
@@ -129,17 +128,17 @@ class AliCodeAnalysisCheckinHandler(
                 "No suspicious code found！",
                 myProject, "Analyze Finished"
             )
-            return CheckinHandler.ReturnResult.COMMIT
+            return ReturnResult.COMMIT
         }
         if (Messages.showOkCancelDialog(
                 myProject, "Found suspicious code,continue commit？",
                 dialogTitle, commitText, cancelText, null
             ) == Messages.OK
         ) {
-            return CheckinHandler.ReturnResult.COMMIT
+            return ReturnResult.COMMIT
         } else {
             doAnalysis(myProject, virtualFiles.toTypedArray())
-            return CheckinHandler.ReturnResult.CLOSE_WINDOW
+            return ReturnResult.CLOSE_WINDOW
         }
     }
 
@@ -147,11 +146,12 @@ class AliCodeAnalysisCheckinHandler(
         val managerEx = InspectionManager.getInstance(project) as InspectionManagerEx
         val analysisScope = AnalysisScope(
             project,
-            ArrayList(Arrays.asList(*virtualFiles))
+            ArrayList(listOf(*virtualFiles))
         )
         val tools = Inspections.aliInspections(project) { it.tool is AliBaseInspection }
-        AliInspectionAction.createContext(tools, managerEx, null, false, analysisScope)
-            .doInspections(analysisScope)
+        val action = AliPmdCodeInspectionAction()
+        AliPmdCodeInspectionAction.initContext(action, tools, managerEx, null, false, analysisScope)
+        action.analyze(project, analysisScope)
     }
 
     private fun hasViolation(virtualFiles: List<VirtualFile>, project: Project): Boolean {

@@ -4,7 +4,7 @@
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
     <actions>
-        <action class="com.alibaba.p3c.idea.action.AliInspectionAction" id="AliP3CInspectionAction"
+        <action class="com.alibaba.p3c.idea.action.AliPmdCodeInspectionAction" id="AliP3CInspectionAction"
                 popup="true" text="编码规约扫描" icon="P3cIcons.ANALYSIS_ACTION">
             <keyboard-shortcut keymap="$default"
                                first-keystroke="shift ctrl alt J"/>
