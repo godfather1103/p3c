@@ -17,7 +17,7 @@ package com.alibaba.smartfox.idea.common.util
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor
 import com.intellij.ide.plugins.PluginManagerCore
-import com.intellij.ide.plugins.cl.PluginClassLoader
+import com.intellij.ide.plugins.cl.PluginAwareClassLoader
 import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.extensions.PluginId
 
@@ -32,7 +32,7 @@ object PluginVersions {
     val baseVersion163 = 163
     val baseVersion171 = 171
 
-    val pluginId: PluginId = (javaClass.classLoader as PluginClassLoader).pluginId
+    val pluginId: PluginId = (javaClass.classLoader as PluginAwareClassLoader).pluginId
     val pluginDescriptor: IdeaPluginDescriptor = PluginManagerCore.getPlugin(pluginId)!!
 
     /**
