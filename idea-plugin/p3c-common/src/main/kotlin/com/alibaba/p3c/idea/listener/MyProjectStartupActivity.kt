@@ -4,8 +4,12 @@ import com.alibaba.p3c.idea.compatible.inspection.Inspections
 import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.i18n.P3cBundle
 import com.alibaba.p3c.idea.service.FileListenerService
+import com.alibaba.p3c.idea.util.HighlightInfoTypes
+import com.alibaba.p3c.idea.util.HighlightSeverities
 import com.alibaba.p3c.pmd.I18nResources
 import com.alibaba.smartfox.idea.common.util.getService
+import com.intellij.codeInsight.daemon.impl.SeverityRegistrar
+import com.intellij.ide.util.RunOnceUtil
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
@@ -16,6 +20,14 @@ class MyProjectStartupActivity : ProjectActivity, ProjectManagerListener {
     private val p3cConfig = P3cConfig::class.java.getService()
 
     override suspend fun execute(project: Project) {
+
+        // 使用RunOnceUtil注册相关内容
+        RunOnceUtil.runOnceForApp("com.alibaba.p3c.idea.listener.registerStandard") {
+            SeverityRegistrar.registerStandard(HighlightInfoTypes.BLOCKER, HighlightSeverities.BLOCKER)
+            SeverityRegistrar.registerStandard(HighlightInfoTypes.CRITICAL, HighlightSeverities.CRITICAL)
+            SeverityRegistrar.registerStandard(HighlightInfoTypes.MAJOR, HighlightSeverities.MAJOR)
+        }
+
         I18nResources.changeLanguage(p3cConfig.locale)
         val analyticsGroup = ActionManager.getInstance().getAction(analyticsGroupId)
         analyticsGroup.templatePresentation.text = P3cBundle.getMessage(analyticsGroupText)
