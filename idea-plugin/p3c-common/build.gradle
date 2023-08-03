@@ -37,7 +37,7 @@ ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 dependencies {
     implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.25-incubating'
-    implementation 'com.alibaba.p3c:p3c-pmd:2.1.1'
+    implementation 'com.alibaba.p3c:p3c-pmd:' + p3c_pmd_version
     implementation group: 'org.javassist', name: 'javassist', version: '3.21.0-GA'
 }
 
