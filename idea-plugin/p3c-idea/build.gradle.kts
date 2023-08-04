@@ -69,6 +69,15 @@ tasks {
         privateKeyFile.set(file("${project.property("signing.privateKeyFile")}"))
         password.set("${project.property("signing.password")}")
     }
+
+    initializeIntelliJPlugin {
+        offline.set(true)
+    }
+
+    downloadZipSigner {
+        cliPath.set("${project.allprojects.find { it.name == "p3c-idea" }!!.projectDir.absolutePath}/tools/marketplace-zip-signer-cli.jar")
+    }
+
 }
 
 version = "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}"
