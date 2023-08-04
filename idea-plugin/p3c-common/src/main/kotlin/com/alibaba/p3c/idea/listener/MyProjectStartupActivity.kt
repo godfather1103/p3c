@@ -13,14 +13,14 @@ import com.intellij.ide.util.RunOnceUtil
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
-import com.intellij.openapi.startup.ProjectActivity
+import com.intellij.openapi.startup.StartupActivity
 
-class MyProjectStartupActivity : ProjectActivity, ProjectManagerListener {
+class MyProjectStartupActivity : StartupActivity, ProjectManagerListener {
+
 
     private val p3cConfig = P3cConfig::class.java.getService()
 
-    override suspend fun execute(project: Project) {
-
+    override fun runActivity(project: Project) {
         // 使用RunOnceUtil注册相关内容
         RunOnceUtil.runOnceForApp("com.alibaba.p3c.idea.listener.registerStandard") {
             SeverityRegistrar.registerStandard(HighlightInfoTypes.BLOCKER, HighlightSeverities.BLOCKER)

@@ -32,10 +32,10 @@
         </group>
     </actions>
 
-    <extensionPoints>
-        <extensionPoint name="inspectionAction"
-                        interface="com.alibaba.p3c.idea.ep.InspectionActionExtensionPoint"/>
-    </extensionPoints>
+<!--    <extensionPoints>-->
+<!--        <extensionPoint name="inspectionAction"-->
+<!--                        interface="com.alibaba.p3c.idea.ep.InspectionActionExtensionPoint"/>-->
+<!--    </extensionPoints>-->
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup id="SmartFox Intellij IDEA Balloon Notification" displayType="BALLOON"/>
         <notificationGroup id="SmartFox Intellij IDEA Notification" displayType="STICKY_BALLOON"/>
