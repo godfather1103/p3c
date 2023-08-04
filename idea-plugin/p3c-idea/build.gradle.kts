@@ -56,7 +56,6 @@ tasks {
     }
 
     signPlugin {
-        println(project.properties)
         certificateChainFile.set(file("${project.property("signing.certificateChainFile")}"))
         privateKeyFile.set(file("${project.property("signing.privateKeyFile")}"))
         password.set("${project.property("signing.password")}")
