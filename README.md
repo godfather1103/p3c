@@ -6,6 +6,15 @@
 
 - fork节点为[6c59c8c3](https://github.com/alibaba/p3c/commit/6c59c8c36ecd8722c712d5685b8c3822c1c8b030)
 
+
+插件已经上传到了jetbrains的插件市场  
+欢迎安装[https://plugins.jetbrains.com/plugin/22381-alibaba-java-coding-guidelines-fix-some-bug-](https://plugins.jetbrains.com/plugin/22381-alibaba-java-coding-guidelines-fix-some-bug-)
+
+
+# 插件版本号说明
+
+> 迭代版本 + idea版本 + P3C_PMD版本
+
 # 已修复的issues
 
 - [issues-898](https://github.com/alibaba/p3c/issues/898)
