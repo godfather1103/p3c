@@ -10,6 +10,7 @@ val ideaVersion = property("idea_version") as String
 val yearVersion = ideaVersion
     .split(".")
     .first()
+    .substring(2)
     .toInt()
 
 val noVersion = ideaVersion
@@ -17,9 +18,9 @@ val noVersion = ideaVersion
     .toInt()
 
 val myPlugins = when (yearVersion) {
-    in 2023..Int.MAX_VALUE -> setOf("vcs-git", "java")
-    2022 -> if (noVersion == 3) setOf("vcs-git", "java") else setOf("git4idea", "java")
-    in 2019..2021 -> setOf("git4idea", "java")
+    in 23..Int.MAX_VALUE -> setOf("vcs-git", "java")
+    22 -> if (noVersion == 3) setOf("vcs-git", "java") else setOf("git4idea", "java")
+    in 19..21 -> setOf("git4idea", "java")
     else -> setOf("git4idea")
 }
 
@@ -33,8 +34,8 @@ intellij {
 
 tasks {
     patchPluginXml {
-        sinceBuild.set("${project.property("pluginSinceBuild")}")
-        untilBuild.set("${project.property("pluginUntilBuild")}")
+        sinceBuild.set("${yearVersion}${noVersion}.0")
+        untilBuild.set("${yearVersion}${noVersion}.*")
         pluginId.set("io.github.godfather1103.alibaba.p3c")
         pluginDescription.set(
             """

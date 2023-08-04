@@ -12,13 +12,13 @@ import com.intellij.codeInsight.daemon.impl.SeverityRegistrar
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
-import com.intellij.openapi.startup.StartupActivity
+import com.intellij.openapi.startup.ProjectActivity
 
-class MyProjectStartupActivity : StartupActivity, ProjectManagerListener {
+class MyProjectStartupActivity : ProjectActivity, ProjectManagerListener {
 
     private val p3cConfig = P3cConfig::class.java.getService()
 
-    override fun runActivity(project: Project) {
+    override suspend fun execute(project: Project) {
         registerStandard()
         I18nResources.changeLanguage(p3cConfig.locale)
         val analyticsGroup = ActionManager.getInstance().getAction(analyticsGroupId)
