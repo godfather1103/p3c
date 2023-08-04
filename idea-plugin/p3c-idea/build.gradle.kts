@@ -52,9 +52,14 @@ tasks {
         changeNotes.set(
             """
         <ul>
-        2.1.1
+        1.0
         <li>fix(<a href="https://github.com/alibaba/p3c/issues/898">issues-898</a>): 1、修复2022.1中检测到缺失override注解出现异常；2、修复编译异常</li>
         <li>fix(<a href="https://github.com/alibaba/p3c/issues/900">issues-900</a>): 修复驼峰等自动修改异常</li>
+        </ul>
+        <ul>
+        1.1
+        <li>优化对于2023.2的API调度</li>
+        <li>优化对应分析结果信息分组</li>
         </ul>
         """.trimIndent()
         )
