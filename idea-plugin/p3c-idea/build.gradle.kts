@@ -5,13 +5,21 @@ plugins {
 apply(plugin = "kotlin")
 apply(plugin = "idea")
 
-val intVersion = (property("idea_version") as String)
+val ideaVersion = property("idea_version") as String
+
+val yearVersion = ideaVersion
     .split(".")
     .first()
     .toInt()
-val myPlugins = when (intVersion) {
+
+val noVersion = ideaVersion
+    .substring(ideaVersion.indexOf(".") + 1)
+    .toInt()
+
+val myPlugins = when (yearVersion) {
     in 2023..Int.MAX_VALUE -> setOf("vcs-git", "java")
-    in 2019..2022 -> setOf("git4idea", "java")
+    2022 -> if (noVersion == 3) setOf("vcs-git", "java") else setOf("git4idea", "java")
+    in 2019..2021 -> setOf("git4idea", "java")
     else -> setOf("git4idea")
 }
 
@@ -62,7 +70,7 @@ tasks {
     }
 }
 
-version = "${property("plugin_version")}-${property("idea_version")}-${property("p3c_pmd_version")}"
+version = "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}"
 
 dependencies {
     implementation("org.freemarker:freemarker:2.3.25-incubating")

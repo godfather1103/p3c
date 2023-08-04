@@ -18,7 +18,7 @@ java {
 def myPlugins = ['git4idea']
 def versionDotIndex = idea_version.indexOf('.')
 def intVersion = versionDotIndex == -1 ? Integer.parseInt(idea_version) : Integer.parseInt(idea_version.substring(0, versionDotIndex))
-if (intVersion >= 2023) {
+if (intVersion >= 2023 || "2022.3".equals(idea_version)) {
     myPlugins = ['vcs-git', 'java']
 } else if (intVersion >= 2019) {
     myPlugins = ['git4idea', 'java']
