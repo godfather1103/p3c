@@ -1,28 +1,14 @@
 plugins {
-    id("org.jetbrains.intellij") version "1.13.3"
+    id("org.jetbrains.intellij")
 }
 
-val ideaVersion = property("idea_version") as String
-
-val yearVersion = ideaVersion
-    .split(".")
-    .first()
-    .substring(2)
-    .toInt()
-
-val noVersion = ideaVersion
-    .substring(ideaVersion.indexOf(".") + 1)
-    .toInt()
-
-val myPlugins = when (yearVersion) {
-    in 23..Int.MAX_VALUE -> setOf("vcs-git", "java")
-    22 -> if (noVersion == 3) setOf("vcs-git", "java") else setOf("git4idea", "java")
-    in 19..21 -> setOf("git4idea", "java")
-    else -> setOf("git4idea")
-}
+val ideaVersion = rootProject.ext.get("ideaVersion") as String
+val yearVersion = rootProject.ext.get("yearVersion") as Int
+val noVersion = rootProject.ext.get("noVersion") as Int
+val myPlugins = rootProject.ext.get("myPlugins") as Set<*>
 
 intellij {
-    version.set("${property("idea_version")}")
+    version.set(ideaVersion)
     plugins.set(myPlugins)
     pluginName.set("${property("plugin_name")}")
     updateSinceUntilBuild.set(false)

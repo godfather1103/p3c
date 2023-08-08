@@ -1,8 +1,7 @@
 plugins {
-    id "org.jetbrains.intellij" version "1.13.3"
+    id "org.jetbrains.intellij"
+    id "signing"
 }
-
-apply plugin: 'signing'
 
 javadoc {
     options.tags = ["date"]
@@ -13,14 +12,7 @@ java {
     withSourcesJar()
 }
 
-def myPlugins = ['git4idea']
-def versionDotIndex = idea_version.indexOf('.')
-def intVersion = versionDotIndex == -1 ? Integer.parseInt(idea_version) : Integer.parseInt(idea_version.substring(0, versionDotIndex))
-if (intVersion >= 2023 || "2022.3" == idea_version) {
-    myPlugins = ['vcs-git', 'java']
-} else if (intVersion >= 2019) {
-    myPlugins = ['git4idea', 'java']
-}
+def myPlugins = rootProject.ext.myPlugins as Set
 
 intellij {
     version.set(idea_version)
