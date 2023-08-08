@@ -51,13 +51,21 @@ tasks {
     }
 
     publishPlugin {
-        token.set("${project.property("ORG_GRADLE_PROJECT_intellijPublishToken")}")
+        project.findProperty("ORG_GRADLE_PROJECT_intellijPublishToken").let {
+            token.set(it as String)
+        }
     }
 
     signPlugin {
-        certificateChainFile.set(file("${project.property("signing.certificateChainFile")}"))
-        privateKeyFile.set(file("${project.property("signing.privateKeyFile")}"))
-        password.set("${project.property("signing.password")}")
+        project.findProperty("signing.certificateChainFile").let {
+            certificateChainFile.set(file(it as String))
+        }
+        project.findProperty("signing.privateKeyFile").let {
+            privateKeyFile.set(file(it as String))
+        }
+        project.findProperty("signing.password").let {
+            password.set(it as String)
+        }
     }
 
     initializeIntelliJPlugin {
