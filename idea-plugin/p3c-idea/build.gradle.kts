@@ -51,19 +51,19 @@ tasks {
     }
 
     publishPlugin {
-        project.findProperty("ORG_GRADLE_PROJECT_intellijPublishToken").let {
+        project.findProperty("ORG_GRADLE_PROJECT_intellijPublishToken")?.let {
             token.set(it as String)
         }
     }
 
     signPlugin {
-        project.findProperty("signing.certificateChainFile").let {
+        project.findProperty("signing.certificateChainFile")?.let {
             certificateChainFile.set(file(it as String))
         }
-        project.findProperty("signing.privateKeyFile").let {
+        project.findProperty("signing.privateKeyFile")?.let {
             privateKeyFile.set(file(it as String))
         }
-        project.findProperty("signing.password").let {
+        project.findProperty("signing.password")?.let {
             password.set(it as String)
         }
     }
