@@ -61,6 +61,8 @@ object Inspections {
         } else {
             method.invoke(profile)
         }
-        return (result as List<ScopeToolState>).map { it.tool }
+        return (result as List<*>)
+            .map { it as ScopeToolState }
+            .map { it.tool }
     }
 }

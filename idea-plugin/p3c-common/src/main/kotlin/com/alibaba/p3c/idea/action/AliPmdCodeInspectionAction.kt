@@ -77,7 +77,7 @@ class AliPmdCodeInspectionAction : CodeInspectionAction() {
         val element = psiFile ?: psiElement
         analysisScope.isIncludeTestSource = false
         analysisScope.setSearchInLibraries(true)
-        initContext(this, toolWrappers, managerEx, element, projectDir, analysisScope)
+        initContext(this, toolWrappers, managerEx, element, projectDir)
         analyze(project, analysisScope)
     }
 
@@ -131,7 +131,7 @@ class AliPmdCodeInspectionAction : CodeInspectionAction() {
         val scope = dialog.getScope(analysisScope)
         scope.setSearchInLibraries(true)
         val element = psiFile ?: psiElement
-        initContext(this, toolWrappers, managerEx, element, dialog.isProjectScopeSelected, scope)
+        initContext(this, toolWrappers, managerEx, element, dialog.isProjectScopeSelected)
         analyze(project, scope)
     }
 
@@ -158,8 +158,7 @@ class AliPmdCodeInspectionAction : CodeInspectionAction() {
             toolWrapperList: List<InspectionToolWrapper<*, *>>,
             managerEx: InspectionManagerEx,
             psiElement: PsiElement?,
-            projectScopeSelected: Boolean,
-            scope: AnalysisScope
+            projectScopeSelected: Boolean
         ) {
             val title = getTitle(psiElement, projectScopeSelected)
             val model = InspectionProfileService.createSimpleProfile(toolWrapperList, managerEx, psiElement)

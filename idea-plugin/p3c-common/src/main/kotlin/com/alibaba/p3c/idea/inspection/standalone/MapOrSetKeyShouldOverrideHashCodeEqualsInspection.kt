@@ -23,16 +23,11 @@ import com.alibaba.p3c.idea.util.ObjectConstants
 import com.google.common.collect.Sets
 import com.intellij.codeHighlighting.HighlightDisplayLevel
 import com.intellij.ide.highlighter.JavaFileType
-import com.intellij.psi.CommonClassNames
-import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiClassType
-import com.intellij.psi.PsiMethodCallExpression
-import com.intellij.psi.PsiType
-import com.intellij.psi.PsiTypeParameter
-import com.intellij.psi.PsiVariable
+import com.intellij.psi.*
 import com.siyeh.ig.BaseInspection
 import com.siyeh.ig.BaseInspectionVisitor
 import org.jetbrains.annotations.NonNls
+import java.util.*
 
 /**
  * @author caikang
@@ -81,7 +76,7 @@ class MapOrSetKeyShouldOverrideHashCodeEqualsInspection : BaseInspection, AliBas
 
         override fun toString(): String {
             val string = super.toString()
-            return string[0] + string.substring(1).toLowerCase()
+            return string[0] + string.substring(1).lowercase(Locale.getDefault())
         }
     }
 

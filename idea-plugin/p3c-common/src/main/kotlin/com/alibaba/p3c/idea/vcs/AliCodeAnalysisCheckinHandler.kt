@@ -150,7 +150,7 @@ class AliCodeAnalysisCheckinHandler(
         )
         val tools = Inspections.aliInspections(project) { it.tool is AliBaseInspection }
         val action = AliPmdCodeInspectionAction()
-        AliPmdCodeInspectionAction.initContext(action, tools, managerEx, null, false, analysisScope)
+        AliPmdCodeInspectionAction.initContext(action, tools, managerEx, null, false)
         action.analyze(project, analysisScope)
     }
 
