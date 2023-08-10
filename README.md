@@ -20,6 +20,19 @@
 - [issues-898](https://github.com/alibaba/p3c/issues/898)
 - [issues-900](https://github.com/alibaba/p3c/issues/900)
 
+# 捐赠(Donate)
+你的馈赠将助力我更好的去贡献，谢谢！  
+Your gift will help me to contribute better, thank you!
+
+[PayPal](https://paypal.me/godfather1103?locale.x=zh_XC)
+
+支付宝(Alipay)  
+![支付宝](pic/hb-300.png)
+![支付宝](pic/Alipay-300.png)
+
+微信(WeChat)  
+![微信支付](pic/WeChat-300.png)
+
 # P3C
 
 最新版本：黄山版（2022.2.3发布）
