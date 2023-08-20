@@ -19,11 +19,9 @@ import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.i18n.P3cBundle
 import com.alibaba.smartfox.idea.common.util.BalloonNotifications
 import com.alibaba.smartfox.idea.common.util.getService
-import com.intellij.notification.NotificationListener
-import com.intellij.openapi.actionSystem.AnAction
+import com.intellij.ide.actions.RestartIdeAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ex.ApplicationManagerEx
-import com.intellij.openapi.project.DumbAware
 
 /**
  *
@@ -31,18 +29,21 @@ import com.intellij.openapi.project.DumbAware
  * @author caikang
  * @date 2017/06/20
  */
-class SwitchLanguageAction : AnAction(), DumbAware {
+class SwitchLanguageAction : RestartIdeAction() {
     private val p3cConfig = P3cConfig::class.java.getService()
 
     private val textKey = "com.alibaba.p3c.action.switch_language.text"
 
     override fun actionPerformed(e: AnActionEvent) {
         p3cConfig.toggleLanguage()
-        BalloonNotifications.showSuccessNotification(P3cBundle.getMessage("$textKey.success"), e.project,
-                NotificationListener { notification, _ ->
-                    notification.expire()
-                    ApplicationManagerEx.getApplicationEx().restart(false)
-                }, sticky = true)
+        BalloonNotifications.showSuccessNotification(
+            P3cBundle.getMessage("$textKey.success"), e.project,
+            { notification, _ ->
+                notification.expire()
+                ApplicationManagerEx.getApplicationEx().restart(false)
+            }, sticky = true
+        )
+        super.actionPerformed(e)
     }
 
     override fun update(e: AnActionEvent) {
