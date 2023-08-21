@@ -17,6 +17,7 @@ package com.alibaba.p3c.idea.config
 
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
+import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
 
 /**
@@ -25,7 +26,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil
  * @author caikang
  * @date 2017/03/01
  */
-@State(name = "SmartFoxProjectConfig", storages = [com.intellij.openapi.components.Storage(file = "smartfox_info.xml")])
+@State(name = "SmartFoxProjectConfig", storages = [Storage("smartfox_info.xml")])
 class SmartFoxProjectConfig : PersistentStateComponent<SmartFoxProjectConfig> {
     var projectInspectionClosed = false
 

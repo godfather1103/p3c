@@ -32,7 +32,8 @@ import icons.P3cIcons
 4
  */
 class ToggleProjectInspectionAction : AnAction() {
-    val textKey = "com.alibaba.p3c.idea.action.ToggleProjectInspectionAction.text"
+
+    private val textKey = "com.alibaba.p3c.idea.action.ToggleProjectInspectionAction.text"
 
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
