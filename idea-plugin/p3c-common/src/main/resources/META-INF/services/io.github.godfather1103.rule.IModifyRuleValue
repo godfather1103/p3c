@@ -1,2 +1,4 @@
 io.github.godfather1103.rule.impl.LowerCamelCaseVariableNamingRule
 io.github.godfather1103.rule.impl.PojoMustOverrideToStringRule
+io.github.godfather1103.rule.impl.ConstantFieldShouldBeUpperCaseRule
+io.github.godfather1103.rule.impl.UndefineMagicConstantRule
