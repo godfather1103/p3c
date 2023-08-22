@@ -2,7 +2,9 @@
 package io.github.godfather1103.settings;
 
 import com.alibaba.p3c.idea.config.P3cConfig;
+import com.alibaba.p3c.pmd.lang.java.util.namelist.NameListConfig;
 import com.intellij.openapi.options.Configurable;
+import io.github.godfather1103.service.BaseNameListServiceExt;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,8 +51,16 @@ public class AppSettingsConfigurable implements Configurable {
 
     @Override
     public void apply() {
+        var inData = mySettingsComponent.getInDataText();
         P3cConfig.getInstance()
-                .setCustomNamelistProperties(mySettingsComponent.getInDataText());
+                .setCustomNamelistProperties(inData);
+        var service = NameListConfig.NAME_LIST_SERVICE;
+        if (service instanceof BaseNameListServiceExt) {
+            BaseNameListServiceExt base = ((BaseNameListServiceExt) service);
+            if (!base.getOldData().equals(inData)) {
+                base.resetData(inData);
+            }
+        }
     }
 
     @Override
