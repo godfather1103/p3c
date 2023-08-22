@@ -58,7 +58,7 @@ public class AppSettingsConfigurable implements Configurable {
         if (service instanceof BaseNameListServiceExt) {
             BaseNameListServiceExt base = ((BaseNameListServiceExt) service);
             if (!base.getOldData().equals(inData)) {
-                base.resetData(inData);
+                base.resetData(inData, true);
             }
         }
     }

@@ -1,0 +1,2 @@
+io.github.godfather1103.rule.impl.LowerCamelCaseVariableNamingRule
+io.github.godfather1103.rule.impl.PojoMustOverrideToStringRule

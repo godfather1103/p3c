@@ -5,6 +5,7 @@ import com.alibaba.p3c.pmd.lang.java.util.namelist.NameListService
 import com.alibaba.p3c.pmd.lang.java.util.namelist.NameListServiceImpl
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import io.github.godfather1103.rule.IModifyRuleValue
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.io.StringReader
@@ -22,6 +23,12 @@ import java.util.*
  */
 abstract class BaseNameListServiceExt : NameListService {
 
+    private val modifyList by lazy {
+        ServiceLoader
+            .load(IModifyRuleValue::class.java, BaseNameListServiceExt::class.java.classLoader)
+            .toList()
+    }
+
     private var properties: Properties = Properties()
 
     var oldData = ""
@@ -35,13 +42,31 @@ abstract class BaseNameListServiceExt : NameListService {
         )
     }
 
-    fun resetData(inDate: String) {
+    fun resetData(inDate: String, isModify: Boolean = false) {
         try {
             resetProperties(inDate)
             oldData = inDate
+            if (isModify) {
+                modifyRuleValue(this)
+            }
         } catch (e: Exception) {
             logger.warn("resetData By [{}] error", inDate, e)
             properties.clear()
+        }
+    }
+
+    open fun modifyRuleValue(base: BaseNameListServiceExt) {
+        properties.keys.forEach { key ->
+            val keys = (key as String).split(SEPARATOR.toRegex(), 2)
+            modifyList.forEach {
+                if (it.className() == keys[0]) {
+                    try {
+                        it.modifyValue(base, keys[1])
+                    } catch (e: Exception) {
+                        logger.warn("className[{}] modifyValue error", it.className(), e)
+                    }
+                }
+            }
         }
     }
 
