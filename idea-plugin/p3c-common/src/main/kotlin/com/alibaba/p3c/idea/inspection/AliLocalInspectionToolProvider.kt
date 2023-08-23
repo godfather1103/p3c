@@ -32,16 +32,8 @@ import com.intellij.psi.PsiCompiledFile
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiImportList
 import com.intellij.psi.PsiJavaFile
-import javassist.CannotCompileException
-import javassist.ClassClassPath
-import javassist.ClassPool
-import javassist.CtField
-import javassist.NotFoundException
-import net.sourceforge.pmd.Rule
-import net.sourceforge.pmd.RuleSet
-import net.sourceforge.pmd.RuleSetFactory
-import net.sourceforge.pmd.RuleSetNotFoundException
-import net.sourceforge.pmd.RuleSets
+import javassist.*
+import net.sourceforge.pmd.*
 import javax.annotation.Generated
 
 /**
@@ -106,9 +98,9 @@ class AliLocalInspectionToolProvider : InspectionToolProvider {
                 val virtualFile = file.virtualFile
                 val index = ProjectRootManager.getInstance(file.project).fileIndex
                 return index.isInSource(virtualFile)
-                    && !index.isInTestSourceContent(virtualFile)
-                    && !index.isInLibraryClasses(virtualFile)
-                    && !index.isInLibrarySource(virtualFile)
+                        && !index.isInTestSourceContent(virtualFile)
+                        && !index.isInLibraryClasses(virtualFile)
+                        && !index.isInLibrarySource(virtualFile)
             }
         }
 
