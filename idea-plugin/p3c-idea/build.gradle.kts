@@ -37,6 +37,11 @@ tasks {
         changeNotes.set(
             """
         <ul>
+        1.3
+        <li>增加自定义namelist.properties的功能(Tools->P3C Configure)</li>
+        </ul>
+        <ul>
+        <ul>
         1.2
         <li>fix(存储): 优化数据存储，修复mac无法切换中英文的bug</li>
         <li>feat(切换语言): 优化切换语言的操作，增加重启的窗口</li>
