@@ -15,6 +15,16 @@ import io.github.godfather1103.service.BaseNameListServiceExt
  */
 class MethodReturnWrapperTypeRule : IModifyRuleValue {
     override fun modifyValue(base: BaseNameListServiceExt, key: String) {
-
+        when (key) {
+            "PRIMITIVE_TYPE_TO_WAPPER_TYPE" ->
+                com.alibaba.p3c.pmd.lang.java.rule.exception.MethodReturnWrapperTypeRule::class.java
+                    .declaredFields.find { it.name == key }?.apply {
+                        isAccessible = true
+                        val map = get(null) as MutableMap<String, String>
+                        map.clear()
+                        base.getNameMap(className(), key, String::class.java, String::class.java)
+                            .forEach { (t, u) -> map[t] = u }
+                    }
+        }
     }
 }

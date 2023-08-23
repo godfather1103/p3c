@@ -8,5 +8,7 @@ interface IModifyRuleValue {
         return javaClass.simpleName
     }
 
+    fun needModifyOnInit(): Boolean = false
+
     fun modifyValue(base: BaseNameListServiceExt, key: String)
 }

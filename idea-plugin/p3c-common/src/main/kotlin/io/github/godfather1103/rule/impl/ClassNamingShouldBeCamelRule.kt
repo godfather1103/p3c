@@ -15,6 +15,16 @@ import io.github.godfather1103.service.BaseNameListServiceExt
  */
 class ClassNamingShouldBeCamelRule : IModifyRuleValue {
     override fun modifyValue(base: BaseNameListServiceExt, key: String) {
-
+        when (key) {
+            "CLASS_NAMING_WHITE_LIST" ->
+                com.alibaba.p3c.pmd.lang.java.rule.naming.ClassNamingShouldBeCamelRule::class.java
+                    .declaredFields.find { it.name == key }?.apply {
+                        isAccessible = true
+                        val set = get(null) as MutableList<String>
+                        set.clear()
+                        base.getNameList(className(), key)
+                            .forEach { set.add(it) }
+                    }
+        }
     }
 }

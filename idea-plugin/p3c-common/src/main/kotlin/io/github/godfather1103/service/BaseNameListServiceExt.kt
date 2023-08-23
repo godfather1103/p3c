@@ -42,28 +42,28 @@ abstract class BaseNameListServiceExt : NameListService {
         )
     }
 
-    fun resetData(inDate: String, isModify: Boolean = false) {
+    fun resetData(inDate: String, isReset: Boolean = false) {
         try {
             resetProperties(inDate)
             oldData = inDate
-            if (isModify) {
-                modifyRuleValue(this)
-            }
+            modifyRuleValue(this, isReset)
         } catch (e: Exception) {
             logger.warn("resetData By [{}] error", inDate, e)
             properties.clear()
         }
     }
 
-    open fun modifyRuleValue(base: BaseNameListServiceExt) {
+    open fun modifyRuleValue(base: BaseNameListServiceExt, isReset: Boolean = false) {
         properties.keys.forEach { key ->
             val keys = (key as String).split(SEPARATOR.toRegex(), 2)
             modifyList.forEach {
-                if (it.className() == keys[0]) {
-                    try {
-                        it.modifyValue(base, keys[1])
-                    } catch (e: Exception) {
-                        logger.warn("className[{}] modifyValue error", it.className(), e)
+                if (isReset || it.needModifyOnInit()) {
+                    if (it.className() == keys[0]) {
+                        try {
+                            it.modifyValue(base, keys[1])
+                        } catch (e: Exception) {
+                            logger.warn("className[{}] modifyValue error", it.className(), e)
+                        }
                     }
                 }
             }

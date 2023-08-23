@@ -15,6 +15,16 @@ import io.github.godfather1103.service.BaseNameListServiceExt
  */
 class CollectionInitShouldAssignCapacityRule : IModifyRuleValue {
     override fun modifyValue(base: BaseNameListServiceExt, key: String) {
-
+        when (key) {
+            "COLLECTION_TYPE" ->
+                com.alibaba.p3c.pmd.lang.java.rule.set.CollectionInitShouldAssignCapacityRule::class.java
+                    .declaredFields.find { it.name == "COLLECTION_LIST" }?.apply {
+                        isAccessible = true
+                        val set = get(null) as MutableList<String>
+                        set.clear()
+                        base.getNameList(className(), key)
+                            .forEach { set.add(it) }
+                    }
+        }
     }
 }
