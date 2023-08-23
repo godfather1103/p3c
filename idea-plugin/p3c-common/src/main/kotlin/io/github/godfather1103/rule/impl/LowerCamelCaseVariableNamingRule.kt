@@ -1,6 +1,7 @@
 package io.github.godfather1103.rule.impl
 
 import io.github.godfather1103.rule.IModifyRuleValue
+import io.github.godfather1103.rule.ext.LowerCamelCaseVariableNamingRuleExt
 import io.github.godfather1103.service.BaseNameListServiceExt
 
 /**
@@ -24,11 +25,7 @@ class LowerCamelCaseVariableNamingRule : IModifyRuleValue {
             "WHITE_LIST" -> {
                 val list = base.getNameList(className(), key).distinct()
                 if (list.isNotEmpty()) {
-                    val rex = makeRex(list).toRegex()
-                    com.alibaba.p3c.pmd.lang.java.rule.naming.LowerCamelCaseVariableNamingRule::class.java
-                        .declaredFields
-                        .find { it.name=="pattern" }
-                        ?.let { println(it) }
+                    LowerCamelCaseVariableNamingRuleExt.pattern = makeRex(list).toPattern()
                 }
             }
         }
