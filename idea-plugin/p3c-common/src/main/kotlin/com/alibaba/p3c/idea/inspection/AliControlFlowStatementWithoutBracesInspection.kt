@@ -28,14 +28,8 @@ import com.siyeh.ig.style.ControlFlowStatementWithoutBracesInspection
  * @author caikang
  * @date 2016/12/15
  */
-class AliControlFlowStatementWithoutBracesInspection
-    : ControlFlowStatementWithoutBracesInspection,
-        AliBaseInspection {
-    constructor()
-    /**
-     * For Javassist
-     */
-    constructor(any: Any?) : this()
+class AliControlFlowStatementWithoutBracesInspection(any: Any?) : ControlFlowStatementWithoutBracesInspection(),
+    AliBaseInspection {
 
     override fun ruleName(): String {
         return "NeedBraceRule"

@@ -20,13 +20,7 @@ import com.alibaba.p3c.idea.quickfix.DecorateInspectionGadgetsFix
 import com.intellij.codeHighlighting.HighlightDisplayLevel
 import com.intellij.codeInspection.InspectionManager
 import com.intellij.codeInspection.LocalQuickFix
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiExpression
-import com.intellij.psi.PsiField
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiLiteralExpression
-import com.intellij.psi.PsiMethodCallExpression
-import com.intellij.psi.PsiReferenceExpression
+import com.intellij.psi.*
 import com.siyeh.HardcodedMethodConstants
 import com.siyeh.ig.BaseInspectionVisitor
 import com.siyeh.ig.InspectionGadgetsFix
@@ -40,12 +34,7 @@ import org.jetbrains.annotations.NonNls
  * @author caikang
  * @date 2017/02/27
  */
-class AliEqualsAvoidNullInspection : LiteralAsArgToStringEqualsInspection, AliBaseInspection {
-    constructor()
-    /**
-     * For Javassist
-     */
-    constructor(any: Any?) : this()
+class AliEqualsAvoidNullInspection(any: Any?) : LiteralAsArgToStringEqualsInspection(), AliBaseInspection {
 
     override fun ruleName(): String {
         return "EqualsAvoidNullRule"
@@ -57,8 +46,10 @@ class AliEqualsAvoidNullInspection : LiteralAsArgToStringEqualsInspection, AliBa
 
     override fun buildErrorString(vararg infos: Any?): String {
         val methodName = infos[0] as String
-        return String.format(P3cBundle.getMessage("com.alibaba.p3c.idea.inspection.rule.AliEqualsAvoidNull.errMsg"),
-                methodName)
+        return String.format(
+            P3cBundle.getMessage("com.alibaba.p3c.idea.inspection.rule.AliEqualsAvoidNull.errMsg"),
+            methodName
+        )
     }
 
     override fun getShortName(): String {
@@ -80,7 +71,8 @@ class AliEqualsAvoidNullInspection : LiteralAsArgToStringEqualsInspection, AliBa
     private class LiteralAsArgToEqualsVisitor : BaseInspectionVisitor() {
 
         override fun visitMethodCallExpression(
-                expression: PsiMethodCallExpression) {
+            expression: PsiMethodCallExpression
+        ) {
             super.visitMethodCallExpression(expression)
             val methodExpression = expression.methodExpression
             @NonNls val methodName = methodExpression.referenceName
@@ -119,8 +111,10 @@ class AliEqualsAvoidNullInspection : LiteralAsArgToStringEqualsInspection, AliBa
 
     override fun buildFix(vararg infos: Any): InspectionGadgetsFix? {
         val fix = super.buildFix(*infos) ?: return null
-        return DecorateInspectionGadgetsFix(fix,
-                P3cBundle.getMessage("com.alibaba.p3c.idea.quickfix.AliEqualsAvoidNull"))
+        return DecorateInspectionGadgetsFix(
+            fix,
+            P3cBundle.getMessage("com.alibaba.p3c.idea.quickfix.AliEqualsAvoidNull")
+        )
     }
 
     override fun manualBuildFix(psiElement: PsiElement, isOnTheFly: Boolean): LocalQuickFix? {
