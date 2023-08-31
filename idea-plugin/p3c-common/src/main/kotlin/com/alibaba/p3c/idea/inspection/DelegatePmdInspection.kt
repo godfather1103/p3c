@@ -21,7 +21,6 @@ import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-
 import org.jetbrains.annotations.Nls
 
 /**
@@ -32,18 +31,17 @@ class DelegatePmdInspection : LocalInspectionTool(), AliBaseInspection, PmdRuleI
 
     private val ruleName: String? = null
 
-    private val aliPmdInspection: AliPmdInspection
-
-    init {
-        aliPmdInspection = AliPmdInspection(ruleName!!)
-    }
+    private val aliPmdInspection: AliPmdInspection = AliPmdInspection(ruleName!!)
 
     override fun runForWholeFile(): Boolean {
         return aliPmdInspection.runForWholeFile()
     }
 
-    override fun checkFile(file: PsiFile, manager: InspectionManager,
-            isOnTheFly: Boolean): Array<ProblemDescriptor>? {
+    override fun checkFile(
+        file: PsiFile,
+        manager: InspectionManager,
+        isOnTheFly: Boolean
+    ): Array<ProblemDescriptor>? {
         return aliPmdInspection.checkFile(file, manager, isOnTheFly)
     }
 
