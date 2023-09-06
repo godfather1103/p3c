@@ -23,14 +23,9 @@ import com.siyeh.ig.threading.AccessToNonThreadSafeStaticFieldFromInstanceInspec
  * @author caikang
  * @date 2016/12/08
  */
-class AliAccessToNonThreadSafeStaticFieldFromInstanceInspection
-    : AccessToNonThreadSafeStaticFieldFromInstanceInspection,
-        AliBaseInspection {
-    constructor()
-    /**
-     * For Javassist
-     */
-    constructor(any: Any?) : this()
+class AliAccessToNonThreadSafeStaticFieldFromInstanceInspection(any: Any?) :
+    AccessToNonThreadSafeStaticFieldFromInstanceInspection(),
+    AliBaseInspection {
 
     init {
         nonThreadSafeClasses.clear()

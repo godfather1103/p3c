@@ -28,30 +28,15 @@ import com.intellij.codeInsight.daemon.impl.quickfix.AccessStaticViaInstanceFix
 import com.intellij.codeInsight.daemon.impl.quickfix.RemoveUnusedVariableUtil
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstance
-import com.intellij.psi.JavaElementVisitor
-import com.intellij.psi.JavaResolveResult
-import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiElementVisitor
-import com.intellij.psi.PsiMember
-import com.intellij.psi.PsiModifier
-import com.intellij.psi.PsiPackage
-import com.intellij.psi.PsiReferenceExpression
-import com.intellij.psi.PsiSubstitutor
-import java.util.ArrayList
+import com.intellij.psi.*
 
 /**
  * @author caikang
  * @date 2016/12/08
  */
-class AliAccessStaticViaInstanceInspection : AccessStaticViaInstance, AliBaseInspection {
-    val messageKey = "com.alibaba.p3c.idea.inspection.standalone.AliAccessStaticViaInstanceInspection"
+class AliAccessStaticViaInstanceInspection(any: Any?) : AccessStaticViaInstance(), AliBaseInspection {
 
-    constructor()
-    /**
-     * For Javassist
-     */
-    constructor(any: Any?) : this()
+    val messageKey = "com.alibaba.p3c.idea.inspection.standalone.AliAccessStaticViaInstanceInspection"
 
     override fun getDisplayName(): String {
         return P3cBundle.getMessage("$messageKey.message")
@@ -69,27 +54,36 @@ class AliAccessStaticViaInstanceInspection : AccessStaticViaInstance, AliBaseIns
         return "AliAccessStaticViaInstance"
     }
 
-    override fun createAccessStaticViaInstanceFix(expr: PsiReferenceExpression,
-            onTheFly: Boolean,
-            result: JavaResolveResult): AccessStaticViaInstanceFix {
+    override fun createAccessStaticViaInstanceFix(
+        expr: PsiReferenceExpression,
+        onTheFly: Boolean,
+        result: JavaResolveResult
+    ): AccessStaticViaInstanceFix {
         return object : AccessStaticViaInstanceFix(expr, result, onTheFly) {
+
             val fixKey = "com.alibaba.p3c.idea.quickfix.standalone.AliAccessStaticViaInstanceInspection"
-            internal val text = calcText(result.element as PsiMember, result.substitutor)
+
+            val resultText = calcText(result.element as PsiMember, result.substitutor)
 
             override fun getText(): String {
-                return text
+                return resultText
             }
 
             private fun calcText(member: PsiMember, substitutor: PsiSubstitutor): String {
                 val aClass = member.containingClass ?: return ""
                 val p3cConfig = P3cConfig::class.java.getService()
                 return when (p3cConfig.locale) {
-                    P3cConfig.localeZh -> String.format(P3cBundle.getMessage(fixKey),
-                            HighlightUtil.formatClass(aClass, false),
-                            HighlightUtil.formatClass(aClass), HighlightMessageUtil.getSymbolName(member, substitutor))
-                    else -> String.format(P3cBundle.getMessage(fixKey), HighlightUtil.formatClass(aClass),
-                            HighlightMessageUtil.getSymbolName(member, substitutor),
-                            HighlightUtil.formatClass(aClass, false))
+                    P3cConfig.localeZh -> String.format(
+                        P3cBundle.getMessage(fixKey),
+                        HighlightUtil.formatClass(aClass, false),
+                        HighlightUtil.formatClass(aClass), HighlightMessageUtil.getSymbolName(member, substitutor)
+                    )
+
+                    else -> String.format(
+                        P3cBundle.getMessage(fixKey), HighlightUtil.formatClass(aClass),
+                        HighlightMessageUtil.getSymbolName(member, substitutor),
+                        HighlightUtil.formatClass(aClass, false)
+                    )
                 }
             }
         }
@@ -107,8 +101,10 @@ class AliAccessStaticViaInstanceInspection : AccessStaticViaInstance, AliBaseIns
         return HighlightDisplayLevels.BLOCKER
     }
 
-    private fun checkAccessStaticMemberViaInstanceReference(expr: PsiReferenceExpression, holder: ProblemsHolder,
-            onTheFly: Boolean) {
+    private fun checkAccessStaticMemberViaInstanceReference(
+        expr: PsiReferenceExpression, holder: ProblemsHolder,
+        onTheFly: Boolean
+    ) {
         val result = expr.advancedResolve(false)
         val resolved = result.element as? PsiMember ?: return
 
@@ -124,10 +120,16 @@ class AliAccessStaticViaInstanceInspection : AccessStaticViaInstance, AliBaseIns
             return
         }
 
-        val description = String.format(P3cBundle.getMessage(
-                "$messageKey.errMsg"),
-                "${JavaHighlightUtil.formatType(qualifierExpression.type)}.${HighlightMessageUtil.getSymbolName(
-                        resolved, result.substitutor)}")
+        val description = String.format(
+            P3cBundle.getMessage(
+                "$messageKey.errMsg"
+            ),
+            "${JavaHighlightUtil.formatType(qualifierExpression.type)}.${
+                HighlightMessageUtil.getSymbolName(
+                    resolved, result.substitutor
+                )
+            }"
+        )
         if (!onTheFly) {
             if (RemoveUnusedVariableUtil.checkSideEffects(qualifierExpression, null, ArrayList<PsiElement>())) {
                 holder.registerProblem(expr, description)

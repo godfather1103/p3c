@@ -36,15 +36,9 @@ import javax.swing.JComponent
  * @author caikang
  * @date 2016/12/08
  */
-class AliMissingOverrideAnnotationInspection : MissingOverrideAnnotationInspection, AliBaseInspection {
+class AliMissingOverrideAnnotationInspection(any: Any?) : MissingOverrideAnnotationInspection(), AliBaseInspection {
+
     private val messageKey = "com.alibaba.p3c.idea.inspection.standalone.AliMissingOverrideAnnotationInspection"
-
-    constructor()
-
-    /**
-     * For Javassist
-     */
-    constructor(any: Any?) : this()
 
     init {
         ignoreAnonymousClassMethods = false

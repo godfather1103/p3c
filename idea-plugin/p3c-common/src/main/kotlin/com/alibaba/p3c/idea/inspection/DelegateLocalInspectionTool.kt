@@ -16,11 +16,7 @@
 package com.alibaba.p3c.idea.inspection
 
 import com.intellij.codeHighlighting.HighlightDisplayLevel
-import com.intellij.codeInspection.InspectionManager
-import com.intellij.codeInspection.LocalInspectionTool
-import com.intellij.codeInspection.LocalInspectionToolSession
-import com.intellij.codeInspection.ProblemDescriptor
-import com.intellij.codeInspection.ProblemsHolder
+import com.intellij.codeInspection.*
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.PsiFile
@@ -35,11 +31,7 @@ class DelegateLocalInspectionTool : LocalInspectionTool(), AliBaseInspection {
 
     private val forJavassist: LocalInspectionTool? = null
 
-    private val localInspectionTool: LocalInspectionTool
-
-    init {
-        localInspectionTool = forJavassist ?: throw IllegalStateException()
-    }
+    private val localInspectionTool: LocalInspectionTool = forJavassist ?: throw IllegalStateException()
 
     override fun runForWholeFile(): Boolean {
         return localInspectionTool.runForWholeFile()

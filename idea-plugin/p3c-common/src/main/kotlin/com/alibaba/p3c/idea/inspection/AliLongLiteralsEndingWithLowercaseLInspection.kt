@@ -31,12 +31,8 @@ import com.siyeh.ig.numeric.LongLiteralsEndingWithLowercaseLInspection
  * @author caikang
  * @date 2017/01/20
  */
-class AliLongLiteralsEndingWithLowercaseLInspection : LongLiteralsEndingWithLowercaseLInspection, AliBaseInspection {
-    constructor()
-    /**
-     * For Javassist
-     */
-    constructor(any: Any?) : this()
+class AliLongLiteralsEndingWithLowercaseLInspection(any: Any?) : LongLiteralsEndingWithLowercaseLInspection(),
+    AliBaseInspection {
 
     override fun ruleName(): String {
         return "UpperEllRule"
@@ -64,8 +60,10 @@ class AliLongLiteralsEndingWithLowercaseLInspection : LongLiteralsEndingWithLowe
 
     override fun buildFix(vararg infos: Any): InspectionGadgetsFix? {
         val fix = super.buildFix(*infos) ?: return null
-        return DecorateInspectionGadgetsFix(fix,
-                P3cBundle.getMessage("com.alibaba.p3c.idea.quickfix.AliLongLiteralsEndingWithLowercaseL"))
+        return DecorateInspectionGadgetsFix(
+            fix,
+            P3cBundle.getMessage("com.alibaba.p3c.idea.quickfix.AliLongLiteralsEndingWithLowercaseL")
+        )
     }
 
     override fun manualBuildFix(psiElement: PsiElement, isOnTheFly: Boolean): LocalQuickFix? {
