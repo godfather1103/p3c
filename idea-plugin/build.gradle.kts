@@ -78,5 +78,7 @@ subprojects {
 
     dependencies {
         testImplementation("junit:junit:4.11")
+        implementation("org.freemarker:freemarker:2.3.25-incubating")
+        implementation("org.javassist:javassist:3.21.0-GA")
     }
 }
