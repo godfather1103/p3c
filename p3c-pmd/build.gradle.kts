@@ -20,7 +20,7 @@ dependencies {
     testImplementation("net.sourceforge.pmd:pmd-test:${property("pmd.version")}")
 }
 
-group = "com.alibaba.p3c"
+group = "io.github.godfather1103.p3c"
 version = "${property("p3c_pmd_version")}"
 description = "p3c-pmd"
 
