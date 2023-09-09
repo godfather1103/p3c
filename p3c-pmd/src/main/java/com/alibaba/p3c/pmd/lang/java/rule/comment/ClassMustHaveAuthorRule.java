@@ -15,21 +15,15 @@
  */
 package com.alibaba.p3c.pmd.lang.java.rule.comment;
 
+import com.alibaba.p3c.pmd.I18nResources;
+import com.alibaba.p3c.pmd.lang.java.util.ViolationUtils;
+import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.java.ast.*;
+
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
-
-import com.alibaba.p3c.pmd.I18nResources;
-import com.alibaba.p3c.pmd.lang.java.util.ViolationUtils;
-
-import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
-import net.sourceforge.pmd.lang.java.ast.ASTEnumDeclaration;
-import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
-import net.sourceforge.pmd.lang.java.ast.Comment;
 
 /**
  * [Mandatory] Every class should include information of author(s) and date.
@@ -60,6 +54,16 @@ public class ClassMustHaveAuthorRule extends AbstractAliCommentRule {
         }
         return data;
     }
+
+    @Override
+    public Object visit(ASTRecordDeclaration node, Object data) {
+        if (node.isPublic()) {
+            checkAuthorComment(node, data);
+        }
+        return data;
+    }
+
+
 
     @Override
     public Object visit(ASTEnumDeclaration decl, Object data) {
