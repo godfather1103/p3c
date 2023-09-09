@@ -28,8 +28,10 @@ version = "2.0.1"
 ext["isReleaseVersion"] = !version.toString().endsWith("SNAPSHOT")
 
 dependencies {
-    implementation("com.alibaba.p3c:p3c-pmd:${property("p3c_pmd_version")}")
-    testImplementation("net.sourceforge.pmd:pmd-test:${property("pmd.version")}")
+    implementation("org.freemarker:freemarker:2.3.25-incubating")
+//    implementation("com.alibaba.p3c:p3c-pmd:${property("p3c_pmd_version")}")
+    implementation(project(":p3c-pmd"))
+    implementation("org.javassist:javassist:3.21.0-GA")
 }
 
 publishing {
