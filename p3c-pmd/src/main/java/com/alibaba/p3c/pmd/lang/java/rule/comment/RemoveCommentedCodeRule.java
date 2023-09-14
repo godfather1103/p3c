@@ -24,15 +24,7 @@ import java.util.regex.Pattern;
 import com.alibaba.p3c.pmd.lang.java.rule.util.NodeSortUtils;
 
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTBlockStatement;
-import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
-import net.sourceforge.pmd.lang.java.ast.ASTConstructorDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTImportDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
-import net.sourceforge.pmd.lang.java.ast.Comment;
-import net.sourceforge.pmd.lang.java.ast.JavaNode;
+import net.sourceforge.pmd.lang.java.ast.*;
 
 /**
  * [Recommended] Codes or configuration that is noticed to be obsoleted should be resolutely removed from projects.
@@ -170,6 +162,10 @@ public class RemoveCommentedCodeRule extends AbstractAliCommentRule {
         NodeSortUtils.addNodesToSortedMap(itemsByLineNumber, blockStatements);
 
         NodeSortUtils.addNodesToSortedMap(itemsByLineNumber, cUnit.getComments());
+
+        List<ASTRecordDeclaration> record = cUnit
+                .findDescendantsOfType(ASTRecordDeclaration.class);
+        NodeSortUtils.addNodesToSortedMap(itemsByLineNumber, record);
 
         return itemsByLineNumber;
     }
