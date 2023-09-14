@@ -38,24 +38,9 @@ tasks {
         changeNotes.set(
             """
         <ul>
-        1.3
-        <li>增加自定义namelist.properties的功能(Tools->P3C Configure)</li>
-        </ul>
-        <ul>
-        <ul>
-        1.2
-        <li>fix(存储): 优化数据存储，修复mac无法切换中英文的bug</li>
-        <li>feat(切换语言): 优化切换语言的操作，增加重启的窗口</li>
-        </ul>
-        <ul>
-        1.1
-        <li>优化对于2023.2的API调度</li>
-        <li>优化对应分析结果信息分组</li>
-        </ul>
-        <ul>
-        1.0
-        <li>fix(<a href="https://github.com/alibaba/p3c/issues/898">issues-898</a>): 1、修复2022.1中检测到缺失override注解出现异常；2、修复编译异常</li>
-        <li>fix(<a href="https://github.com/alibaba/p3c/issues/900">issues-900</a>): 修复驼峰等自动修改异常</li>
+        1.4-beta
+        <li>fix(<a href="https://github.com/godfather1103/p3c/issues/9">issues-9</a>): 1、优化Record类的检测；2、优化Switch的default块判断</li>
+        <li>fix(<a href="https://github.com/godfather1103/p3c/issues/6">issues-6</a>): 增加对Record类的检测</li>
         </ul>
         """.trimIndent()
         )
