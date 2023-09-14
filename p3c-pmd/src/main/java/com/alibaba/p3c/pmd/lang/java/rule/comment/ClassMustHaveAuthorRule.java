@@ -112,6 +112,10 @@ public class ClassMustHaveAuthorRule extends AbstractAliCommentRule {
 
         addDeclarations(itemsByLineNumber, cUnit.getComments());
 
+        List<ASTRecordDeclaration> record = cUnit
+                .findDescendantsOfType(ASTRecordDeclaration.class);
+        addDeclarations(itemsByLineNumber, record);
+
         return itemsByLineNumber;
     }
 
