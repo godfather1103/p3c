@@ -6,6 +6,7 @@ val ideaVersion = rootProject.ext.get("ideaVersion") as String
 val yearVersion = rootProject.ext.get("yearVersion") as Int
 val noVersion = rootProject.ext.get("noVersion") as Int
 val myPlugins = rootProject.ext.get("myPlugins") as Set<*>
+val publishChannel = project.findProperty("publishChannel") as String
 
 intellij {
     version.set(ideaVersion)
@@ -64,6 +65,9 @@ tasks {
         project.findProperty("ORG_GRADLE_PROJECT_intellijPublishToken")?.let {
             token.set(it as String)
         }
+        if (publishChannel.isNotEmpty()) {
+            channels.set(listOf(publishChannel))
+        }
     }
 
     signPlugin {
@@ -88,7 +92,11 @@ tasks {
 
 }
 
-version = "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}"
+if (publishChannel.isNotEmpty()) {
+    version = "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}-${publishChannel}"
+} else {
+    version = "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}"
+}
 
 dependencies {
     implementation(project(":p3c-common"))
