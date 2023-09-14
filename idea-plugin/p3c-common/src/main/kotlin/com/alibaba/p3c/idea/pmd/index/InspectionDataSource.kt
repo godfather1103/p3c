@@ -27,9 +27,19 @@ import java.io.InputStream
  */
 class InspectionDataSource(private val fileContent: FileContent) : DataSource {
 
+    private val input: InputStream
+
+    init {
+        input = ByteArrayInputStream(fileContent.content)
+    }
+
+    override fun close() {
+        input.close()
+    }
+
     @Throws(IOException::class)
     override fun getInputStream(): InputStream {
-        return ByteArrayInputStream(fileContent.content)
+        return input
     }
 
     override fun getNiceFileName(shortNames: Boolean, inputFileName: String?): String {

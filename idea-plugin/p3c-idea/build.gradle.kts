@@ -91,7 +91,5 @@ tasks {
 version = "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}"
 
 dependencies {
-    implementation("org.freemarker:freemarker:2.3.25-incubating")
     implementation(project(":p3c-common"))
-    implementation("org.javassist:javassist:3.21.0-GA")
 }

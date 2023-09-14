@@ -16,7 +16,6 @@
 package com.alibaba.p3c.pmd.lang.java.rule.flowcontrol;
 
 import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule;
-
 import net.sourceforge.pmd.lang.java.ast.ASTSwitchStatement;
 
 /**
@@ -46,8 +45,7 @@ public class SwitchStatementRule extends AbstractAliRule {
      * @param data
      */
     private void checkDefault(ASTSwitchStatement node, Object data) {
-        final String switchCheckXpath = "SwitchLabel[@Default = 'true']";
-        if (!node.hasDescendantMatchingXPath(switchCheckXpath)) {
+        if (!node.hasDefaultCase()) {
             addViolationWithMessage(data, node, MESSAGE_KEY_PREFIX + ".nodefault");
         }
     }

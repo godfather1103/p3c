@@ -15,15 +15,12 @@
  */
 package com.alibaba.p3c.pmd.lang.java.rule.set;
 
-import java.util.List;
-
 import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule;
-
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTBlock;
-import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTName;
+import net.sourceforge.pmd.lang.java.ast.*;
 import org.jaxen.JaxenException;
+
+import java.util.List;
 
 /**
  * [Mandatory] When using subList, be careful to modify the size of original list. It might cause
@@ -38,16 +35,26 @@ public class ConcurrentExceptionWithModifyOriginSubListRule extends AbstractAliR
     private final static String REMOVE = ".remove";
     private final static String CLEAR = ".clear";
     private final static String XPATH
-        = "//VariableDeclarator[../Type/ReferenceType/ClassOrInterfaceType[@Image='List']]/VariableInitializer"
-        + "/Expression/PrimaryExpression/PrimaryPrefix/Name[ends-with(@Image,'.subList')]";
+            = "//VariableDeclarator[../Type/ReferenceType/ClassOrInterfaceType[@Image='List']]/VariableInitializer"
+            + "/Expression/PrimaryExpression/PrimaryPrefix/Name[ends-with(@Image,'.subList')]";
     private final static String CHILD_XPATH
-        = "BlockStatement/Statement/StatementExpression/PrimaryExpression/PrimaryPrefix/Name";
+            = "BlockStatement/Statement/StatementExpression/PrimaryExpression/PrimaryPrefix/Name";
+
+    @Override
+    public Object visit(ASTRecordDeclaration node, Object data) {
+        return visit((AbstractAnyTypeDeclaration) node, data);
+    }
 
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
         if (node.isInterface()) {
             return data;
         }
+        return visit((AbstractAnyTypeDeclaration) node, data);
+    }
+
+    public Object visit(AbstractAnyTypeDeclaration node, Object data) {
+
         try {
             List<Node> nodes = node.findChildNodesWithXPath(XPATH);
             for (Node item : nodes) {
@@ -68,8 +75,8 @@ public class ConcurrentExceptionWithModifyOriginSubListRule extends AbstractAliR
                     }
                     if (checkBlockNodesValid(valName, blockItem)) {
                         addViolationWithMessage(data, blockItem,
-                            "java.set.ConcurrentExceptionWithModifyOriginSubListRule.violation.msg",
-                            new Object[] {blockItem.getImage()});
+                                "java.set.ConcurrentExceptionWithModifyOriginSubListRule.violation.msg",
+                                new Object[]{blockItem.getImage()});
                     }
                 }
 
@@ -117,6 +124,6 @@ public class ConcurrentExceptionWithModifyOriginSubListRule extends AbstractAliR
      */
     private boolean judgeName(String name, String variableName) {
         return name.equals(variableName + ADD) || name.equals(variableName + REMOVE)
-            || name.equals(variableName + CLEAR);
+                || name.equals(variableName + CLEAR);
     }
 }

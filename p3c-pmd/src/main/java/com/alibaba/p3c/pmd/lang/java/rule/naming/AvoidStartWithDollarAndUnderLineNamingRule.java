@@ -18,9 +18,9 @@ package com.alibaba.p3c.pmd.lang.java.rule.naming;
 import com.alibaba.p3c.pmd.I18nResources;
 import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule;
 import com.alibaba.p3c.pmd.lang.java.util.ViolationUtils;
-
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator;
+import net.sourceforge.pmd.lang.java.ast.ASTRecordDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
 
 /**
@@ -33,10 +33,18 @@ public class AvoidStartWithDollarAndUnderLineNamingRule extends AbstractAliRule 
     private static final String DOLLAR = "$";
     private static final String UNDERSCORE = "_";
     private static final String FORMAT = I18nResources.getMessage(
-        "java.naming.AvoidStartWithDollarAndUnderLineNamingRule.violation.msg");
+            "java.naming.AvoidStartWithDollarAndUnderLineNamingRule.violation.msg");
 
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
+        if (node.getImage().startsWith(DOLLAR) || node.getImage().startsWith(UNDERSCORE)) {
+            ViolationUtils.addViolationWithPrecisePosition(this, node, data, String.format(FORMAT, node.getImage()));
+        }
+        return super.visit(node, data);
+    }
+
+    @Override
+    public Object visit(ASTRecordDeclaration node, Object data) {
         if (node.getImage().startsWith(DOLLAR) || node.getImage().startsWith(UNDERSCORE)) {
             ViolationUtils.addViolationWithPrecisePosition(this, node, data, String.format(FORMAT, node.getImage()));
         }

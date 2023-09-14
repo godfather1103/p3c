@@ -15,18 +15,15 @@
  */
 package com.alibaba.p3c.pmd.lang.java.rule.oop;
 
-import java.util.List;
-
 import com.alibaba.p3c.pmd.I18nResources;
 import com.alibaba.p3c.pmd.lang.java.rule.AbstractPojoRule;
 import com.alibaba.p3c.pmd.lang.java.util.VariableUtils;
 import com.alibaba.p3c.pmd.lang.java.util.ViolationUtils;
-
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTVariableInitializer;
+import net.sourceforge.pmd.lang.java.ast.*;
 import org.jaxen.JaxenException;
+
+import java.util.List;
 
 /**
  * [Mandatory] While defining POJO classes like DO, DTO, VO, etc., do not assign any default values to the members.
@@ -38,6 +35,15 @@ public class PojoNoDefaultValueRule extends AbstractPojoRule {
 
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
+        return visit((AbstractAnyTypeDeclaration) node, data);
+    }
+
+    @Override
+    public Object visit(ASTRecordDeclaration node, Object data) {
+        return visit((AbstractAnyTypeDeclaration) node, data);
+    }
+
+    public Object visit(AbstractAnyTypeDeclaration node, Object data) {
         if (!isPojo(node)) {
             return super.visit(node, data);
         }

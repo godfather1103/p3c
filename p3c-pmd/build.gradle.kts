@@ -18,6 +18,7 @@ dependencies {
     api("net.sourceforge.pmd:pmd-vm:${property("pmd.version")}")
     api("javax.annotation:javax.annotation-api:1.3.2")
     testImplementation("net.sourceforge.pmd:pmd-test:${property("pmd.version")}")
+    testImplementation("commons-io:commons-io:2.11.0")
 }
 
 group = "io.github.godfather1103.p3c"
