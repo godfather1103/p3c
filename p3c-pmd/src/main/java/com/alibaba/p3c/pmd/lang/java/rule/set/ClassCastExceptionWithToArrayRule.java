@@ -15,16 +15,12 @@
  */
 package com.alibaba.p3c.pmd.lang.java.rule.set;
 
-import java.util.List;
-
 import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule;
-
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression;
-import net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix;
-import net.sourceforge.pmd.lang.java.ast.ASTPrimarySuffix;
+import net.sourceforge.pmd.lang.java.ast.*;
 import org.jaxen.JaxenException;
+
+import java.util.List;
 
 /**
  * [Mandatory] Do not use toArray method without arguments. Since the return type is Object[], ClassCastException will
@@ -36,26 +32,35 @@ import org.jaxen.JaxenException;
 public class ClassCastExceptionWithToArrayRule extends AbstractAliRule {
 
     private static final String XPATH
-        = "//CastExpression[Type/ReferenceType/ClassOrInterfaceType[@Image !=\"Object\"]]/PrimaryExpression";
+            = "//CastExpression[Type/ReferenceType/ClassOrInterfaceType[@Image !=\"Object\"]]/PrimaryExpression";
 
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
         if (node.isInterface()) {
             return data;
         }
+        return visit((AbstractAnyTypeDeclaration) node, data);
+    }
+
+    @Override
+    public Object visit(ASTRecordDeclaration node, Object data) {
+        return visit((AbstractAnyTypeDeclaration) node, data);
+    }
+
+    public Object visit(AbstractAnyTypeDeclaration node, Object data) {
         try {
             List<Node> nodes = node.findChildNodesWithXPath(XPATH);
             for (Node item : nodes) {
                 if (!(item instanceof ASTPrimaryExpression)) {
                     continue;
                 }
-                ASTPrimaryExpression primaryExpression = (ASTPrimaryExpression)item;
+                ASTPrimaryExpression primaryExpression = (ASTPrimaryExpression) item;
                 List<ASTPrimaryPrefix> primaryPrefixs =
-                    primaryExpression.findChildrenOfType(ASTPrimaryPrefix.class);
+                        primaryExpression.findChildrenOfType(ASTPrimaryPrefix.class);
                 List<ASTPrimarySuffix> primarySuffixs =
-                    primaryExpression.findChildrenOfType(ASTPrimarySuffix.class);
+                        primaryExpression.findChildrenOfType(ASTPrimarySuffix.class);
                 if (primaryPrefixs == null || primarySuffixs == null || primaryPrefixs.isEmpty()
-                    || primarySuffixs.isEmpty()) {
+                        || primarySuffixs.isEmpty()) {
                     continue;
                 }
                 ASTPrimaryPrefix prefix = primaryPrefixs.get(0);
@@ -69,10 +74,10 @@ public class ClassCastExceptionWithToArrayRule extends AbstractAliRule {
                     continue;
                 }
                 if (childName.endsWith(".toArray") && suffix.getArgumentCount() == 0
-                    && primarySuffixs.size() == 1) {
+                        && primarySuffixs.size() == 1) {
                     addViolationWithMessage(data, item,
-                        "java.set.ClassCastExceptionWithToArrayRule.violation.msg",
-                        new Object[] {childName});
+                            "java.set.ClassCastExceptionWithToArrayRule.violation.msg",
+                            new Object[]{childName});
                 }
             }
 

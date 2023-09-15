@@ -15,16 +15,13 @@
  */
 package com.alibaba.p3c.pmd.lang.java.rule.set;
 
-import java.util.List;
-
 import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule;
 import com.alibaba.p3c.pmd.lang.java.util.namelist.NameListConfig;
-
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTArguments;
-import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
+import net.sourceforge.pmd.lang.java.ast.*;
 import org.jaxen.JaxenException;
+
+import java.util.List;
 
 /**
  * [Recommended] Set a size when initializing a collection if possible.
@@ -38,10 +35,19 @@ public class CollectionInitShouldAssignCapacityRule extends AbstractAliRule {
      * Black List,will increase ArrayList, HashSet etc follow-up
      */
     private final static List<String> COLLECTION_LIST = NameListConfig.NAME_LIST_SERVICE
-        .getNameList(CollectionInitShouldAssignCapacityRule.class.getSimpleName(), "COLLECTION_TYPE");
+            .getNameList(CollectionInitShouldAssignCapacityRule.class.getSimpleName(), "COLLECTION_TYPE");
 
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
+        return visit((AbstractAnyTypeDeclaration) node, data);
+    }
+
+    @Override
+    public Object visit(ASTRecordDeclaration node, Object data) {
+        return visit((AbstractAnyTypeDeclaration) node, data);
+    }
+
+    public Object visit(AbstractAnyTypeDeclaration node, Object data) {
         try {
             // find Collection initialization
             for (String collectionType : COLLECTION_LIST) {
@@ -53,10 +59,10 @@ public class CollectionInitShouldAssignCapacityRule extends AbstractAliRule {
         return super.visit(node, data);
     }
 
-    private void visitByCollections(ASTClassOrInterfaceDeclaration node, Object data, String collectionType)
-        throws JaxenException {
+    private void visitByCollections(AbstractAnyTypeDeclaration node, Object data, String collectionType)
+            throws JaxenException {
         String collectionArgXpath =
-            "//AllocationExpression/ClassOrInterfaceType[@Image='" + collectionType + "']/../Arguments";
+                "//AllocationExpression/ClassOrInterfaceType[@Image='" + collectionType + "']/../Arguments";
         List<Node> argumentsNodes = node.findChildNodesWithXPath(collectionArgXpath);
 
         for (Node argNode : argumentsNodes) {
@@ -67,13 +73,13 @@ public class CollectionInitShouldAssignCapacityRule extends AbstractAliRule {
             if (argNode.getFirstParentOfType(ASTMethodDeclaration.class) == null) {
                 continue;
             }
-            ASTArguments argumentNode = (ASTArguments)argNode;
+            ASTArguments argumentNode = (ASTArguments) argNode;
             Integer count = argumentNode.getArgumentCount();
             // judge whether parameters have  initial size
             if (count == 0) {
                 addViolationWithMessage(data, argNode,
-                    "java.set.CollectionInitShouldAssignCapacityRule.violation.msg",
-                    new Object[] {collectionType});
+                        "java.set.CollectionInitShouldAssignCapacityRule.violation.msg",
+                        new Object[]{collectionType});
             }
         }
     }

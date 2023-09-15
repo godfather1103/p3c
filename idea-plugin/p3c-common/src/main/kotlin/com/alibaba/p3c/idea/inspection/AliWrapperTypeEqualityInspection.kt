@@ -21,12 +21,7 @@ import com.intellij.codeHighlighting.HighlightDisplayLevel
 import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.openapi.project.Project
-import com.intellij.psi.CommonClassNames
-import com.intellij.psi.JavaTokenType
-import com.intellij.psi.PsiArrayType
-import com.intellij.psi.PsiBinaryExpression
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiExpression
+import com.intellij.psi.*
 import com.intellij.util.IncorrectOperationException
 import com.siyeh.ig.BaseInspection
 import com.siyeh.ig.BaseInspectionVisitor
@@ -43,15 +38,9 @@ import org.jetbrains.annotations.NonNls
  * @author caikang
  * @date 2017/02/27
  */
-class AliWrapperTypeEqualityInspection : BaseInspection, AliBaseInspection {
-    constructor()
+class AliWrapperTypeEqualityInspection(any: Any?) : BaseInspection(), AliBaseInspection {
 
-    /**
-     * For Javassist
-     */
-    constructor(any: Any?) : this()
-
-    val familyName = "$replaceWith equals"
+    private val familyName = "$replaceWith equals"
 
     override fun buildErrorString(vararg infos: Any?): String {
         return P3cBundle.getMessage("com.alibaba.p3c.idea.inspection.rule.WrapperTypeEqualityRule.errMsg")
@@ -113,7 +102,7 @@ class AliWrapperTypeEqualityInspection : BaseInspection, AliBaseInspection {
                 return true
             }
             return TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_LANG_BOOLEAN)
-                || TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_LANG_CHARACTER)
+                    || TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_LANG_CHARACTER)
         }
 
         private fun hasNumberType(expression: PsiExpression): Boolean {
@@ -145,6 +134,7 @@ class AliWrapperTypeEqualityInspection : BaseInspection, AliBaseInspection {
             val element = descriptor.psiElement
             val parent = element.parent as? PsiBinaryExpression ?: return
             val tokenType = parent.operationTokenType
+
             @NonNls
             val newExpressionText = StringBuilder()
             if (JavaTokenType.NE == tokenType) {

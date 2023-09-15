@@ -46,8 +46,8 @@
         <inspectionToolProvider implementation="com.alibaba.p3c.idea.inspection.AliLocalInspectionToolProvider"/>
         <postStartupActivity implementation="com.alibaba.p3c.idea.listener.MyProjectStartupActivity"/>
 
-        <applicationConfigurable parentId="tools" instance="io.github.godfather1103.settings.AppSettingsConfigurable"
-                                 id="io.github.godfather1103.settings.AppSettingsConfigurable"
+        <applicationConfigurable parentId="tools" instance="io.github.godfather1103.settings.P3CSettingsConfigurable"
+                                 id="io.github.godfather1103.settings.P3CSettingsConfigurable"
                                  displayName="P3C Configure"/>
     </extensions>
 </idea-plugin>

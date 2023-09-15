@@ -15,7 +15,6 @@
  */
 package com.alibaba.p3c.idea.pmd
 
-import com.alibaba.p3c.idea.service.FileListenerService
 import com.google.common.base.Throwables
 import com.intellij.openapi.application.ex.ApplicationUtil
 import com.intellij.openapi.diagnostic.Logger
@@ -32,9 +31,7 @@ import net.sourceforge.pmd.SourceCodeProcessor as PmdSourceCodeProcessor
  * @author caikang
  * @date 2016/12/11
  */
-class AliPmdProcessor private constructor(val rule: Rule? = null, val ruleSets: RuleSets? = null) {
-    constructor(rule: Rule) : this(rule, null)
-    constructor(ruleSets: RuleSets) : this(null, ruleSets)
+class AliPmdProcessor(val rule: Rule? = null, private val ruleSets: RuleSets? = null) {
 
     private val ruleSetFactory: RuleSetFactory
     private val configuration = PMDConfiguration()
@@ -47,9 +44,6 @@ class AliPmdProcessor private constructor(val rule: Rule? = null, val ruleSets: 
         configuration.setSourceEncoding(psiFile.virtualFile.charset.name())
         configuration.inputPaths = psiFile.virtualFile.canonicalPath
         val document = FileDocumentManager.getInstance().getDocument(psiFile.virtualFile) ?: return emptyList()
-        val project = psiFile.project
-        val aliProjectComponent = project.getService(FileListenerService::class.java)
-        val fileContext = aliProjectComponent.getFileContext(psiFile.virtualFile) ?: return emptyList()
         val ctx = RuleContext()
         val niceFileName = psiFile.virtualFile.canonicalPath!!
         val report = Report.createReport(ctx, niceFileName)
@@ -62,16 +56,7 @@ class AliPmdProcessor private constructor(val rule: Rule? = null, val ruleSets: 
         LOG.debug("Processing " + ctx.sourceCodeFilename)
         try {
             val reader = StringReader(document.text)
-            ctx.languageVersion = null
-            if (isOnTheFly) {
-                SourceCodeProcessor(configuration, document, fileContext, isOnTheFly).processSourceCode(
-                    reader,
-                    processRuleSets,
-                    ctx
-                )
-            } else {
-                PmdSourceCodeProcessor(configuration).processSourceCode(reader, processRuleSets, ctx)
-            }
+            PmdSourceCodeProcessor(configuration).processSourceCode(reader, processRuleSets, ctx)
         } catch (pmde: PMDException) {
             LOG.debug("Error while processing file: $niceFileName", pmde.cause)
             report.addError(Report.ProcessingError(pmde, niceFileName))

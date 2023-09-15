@@ -33,12 +33,7 @@ import javax.swing.JComponent
  * @author caikang
  * @date 2017/02/26
  */
-class AliArrayNamingShouldHaveBracketInspection : CStyleArrayDeclarationInspection, AliBaseInspection {
-    constructor()
-    /**
-     * ForJavassist
-     */
-    constructor(any: Any?) : this()
+class AliArrayNamingShouldHaveBracketInspection(any: Any?) : CStyleArrayDeclarationInspection(), AliBaseInspection {
 
     override fun ruleName(): String {
         return "ArrayNamingShouldHaveBracketRule"
@@ -75,8 +70,10 @@ class AliArrayNamingShouldHaveBracketInspection : CStyleArrayDeclarationInspecti
 
     override fun buildFix(vararg infos: Any): InspectionGadgetsFix? {
         val fix = super.buildFix(*infos) ?: return null
-        return DecorateInspectionGadgetsFix(fix,
-                P3cBundle.getMessage("com.alibaba.p3c.idea.quickfix.ArrayNamingShouldHaveBracketRule"))
+        return DecorateInspectionGadgetsFix(
+            fix,
+            P3cBundle.getMessage("com.alibaba.p3c.idea.quickfix.ArrayNamingShouldHaveBracketRule")
+        )
     }
 
     override fun manualBuildFix(psiElement: PsiElement, isOnTheFly: Boolean): LocalQuickFix? {

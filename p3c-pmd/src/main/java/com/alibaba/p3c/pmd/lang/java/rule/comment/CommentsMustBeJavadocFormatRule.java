@@ -15,34 +15,15 @@
  */
 package com.alibaba.p3c.pmd.lang.java.rule.comment;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 import com.alibaba.p3c.pmd.I18nResources;
 import com.alibaba.p3c.pmd.lang.java.rule.util.NodeSortUtils;
-
 import com.alibaba.p3c.pmd.lang.java.util.VariableUtils;
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTAnnotation;
-import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
-import net.sourceforge.pmd.lang.java.ast.ASTConstructorDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTEnumDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTFormalParameter;
-import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
-import net.sourceforge.pmd.lang.java.ast.AbstractJavaAccessNode;
-import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
-import net.sourceforge.pmd.lang.java.ast.Comment;
-import net.sourceforge.pmd.lang.java.ast.MultiLineComment;
-import net.sourceforge.pmd.lang.java.ast.SingleLineComment;
-import net.sourceforge.pmd.lang.java.ast.Token;
+import net.sourceforge.pmd.lang.java.ast.*;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * [Mandatory] Javadoc should be used for classes, class variables and methods.
@@ -60,6 +41,13 @@ public class CommentsMustBeJavadocFormatRule extends AbstractAliCommentRule {
         checkComment(decl, data, () -> I18nResources.getMessage(MESSAGE_KEY_PREFIX + ".class",
             decl.getImage()));
         return super.visit(decl, data);
+    }
+
+    @Override
+    public Object visit(ASTRecordDeclaration node, Object data) {
+        checkComment(node, data, () -> I18nResources.getMessage(MESSAGE_KEY_PREFIX + ".class",
+                node.getImage()));
+        return super.visit(node, data);
     }
 
     @Override

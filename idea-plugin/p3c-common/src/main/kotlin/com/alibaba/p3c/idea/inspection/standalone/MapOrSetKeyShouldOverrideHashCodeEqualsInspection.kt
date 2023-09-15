@@ -33,14 +33,10 @@ import java.util.*
  * @author caikang
  * @date 2017/03/01
  */
-class MapOrSetKeyShouldOverrideHashCodeEqualsInspection : BaseInspection, AliBaseInspection {
+class MapOrSetKeyShouldOverrideHashCodeEqualsInspection(any: Any?) : BaseInspection(), AliBaseInspection {
+
     val messageKey = "com.alibaba.p3c.idea.inspection.standalone.MapOrSetKeyShouldOverrideHashCodeEqualsInspection"
 
-    constructor()
-    /**
-     * For Javassist
-     */
-    constructor(any: Any?) : this()
 
     override fun getDisplayName(): String {
         return P3cBundle.getMessage("$messageKey.message")
@@ -103,9 +99,9 @@ class MapOrSetKeyShouldOverrideHashCodeEqualsInspection : BaseInspection, AliBas
             }
             val supers = aClass.supers
             return supers
-                    .map { isMapOrSet(it, visitedClasses) }
-                    .firstOrNull { it != ClassType.OTHER }
-                    ?: ClassType.OTHER
+                .map { isMapOrSet(it, visitedClasses) }
+                .firstOrNull { it != ClassType.OTHER }
+                ?: ClassType.OTHER
         }
 
         override fun visitVariable(variable: PsiVariable) {
