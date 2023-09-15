@@ -1,10 +1,10 @@
 package io.github.godfather1103.rule.ext
 
-import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule
 import com.alibaba.p3c.pmd.lang.java.rule.naming.LowerCamelCaseVariableNamingRule
 import net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeDeclaration
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator
 import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId
+import net.sourceforge.pmd.lang.java.ast.JavaNode
 import java.util.regex.Pattern
 
 /**
@@ -17,22 +17,20 @@ import java.util.regex.Pattern
  * @version 1.0
  * @since  1.0
  */
-class LowerCamelCaseVariableNamingRuleExt : AbstractAliRule() {
-
-    val rule by lazy { LowerCamelCaseVariableNamingRule() }
+class LowerCamelCaseVariableNamingRuleExt : LowerCamelCaseVariableNamingRule() {
 
     override fun visit(node: ASTVariableDeclaratorId, data: Any?): Any? {
-        if (!(pattern.matcher(node.image)).matches()) {
-            return rule.visit(node, data)
+        if (!(pattern.matcher(node.name)).matches()) {
+            return super.visit(node, data)
         }
-        return super.visit(node, data)
+        return super.visit(node as JavaNode, data)
     }
 
     override fun visit(node: ASTMethodDeclarator, data: Any?): Any? {
         if (!(pattern.matcher(node.image)).matches()) {
-            return rule.visit(node, data)
+            return super.visit(node, data)
         }
-        return super.visit(node, data)
+        return super.visit(node as JavaNode, data)
     }
 
     override fun visit(node: ASTAnnotationTypeDeclaration, data: Any?): Any? {
