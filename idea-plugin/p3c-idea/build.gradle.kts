@@ -13,7 +13,7 @@ intellij {
     plugins.set(myPlugins)
     pluginName.set("${property("plugin_name")}")
     updateSinceUntilBuild.set(false)
-    sandboxDir.set("idea-sandbox")
+    sandboxDir.set("idea-sandbox/${ideaVersion}")
 }
 
 tasks {
