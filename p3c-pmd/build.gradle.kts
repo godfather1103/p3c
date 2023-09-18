@@ -46,6 +46,7 @@ publishing {
         from(components["java"])
         pom {
             url.set("https://github.com/godfather1103/p3c")
+            description.set("p3c pmd rule")
             scm {
                 url.set("https://github.com/godfather1103/p3c")
                 connection.set("scm:git:https://github.com/godfather1103/p3c.git")
