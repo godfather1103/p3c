@@ -42,10 +42,11 @@ publishing {
             }
         }
     }
-    publications.create<MavenPublication>("maven") {
+    publications.create<MavenPublication>("mavenJava") {
         from(components["java"])
         pom {
             url.set("https://github.com/godfather1103/p3c")
+            name.set(project.description)
             description.set("p3c pmd rule")
             scm {
                 url.set("https://github.com/godfather1103/p3c")
@@ -84,7 +85,7 @@ publishing {
 }
 
 signing {
-    sign(publishing.publications["maven"])
+    sign(publishing.publications["mavenJava"])
 }
 
 tasks.withType<JavaCompile> {
