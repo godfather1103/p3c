@@ -50,7 +50,9 @@ public class LowerCamelCaseVariableNamingRule extends AbstractAliRule {
 
     public static void makePattern(List<String> list) {
         Set<String> set = new HashSet<>(0);
-        set.addAll(list);
+        if (list != null && !list.isEmpty()) {
+            set.addAll(list);
+        }
         set.addAll(Arrays.asList("DO|DTO|VO|DAO|BO|DOList|DTOList|VOList|DAOList|BOList|X|Y|Z|UDF|UDAF|[A-Z]".split("\\|")));
         pattern = Pattern.compile("^[a-z][a-z0-9]*([A-Z][a-z0-9]+)*(" + String.join("|", set) + ")?$");
     }
