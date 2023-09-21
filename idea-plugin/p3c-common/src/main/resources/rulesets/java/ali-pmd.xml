@@ -8,15 +8,6 @@
     <rule ref="rulesets/java/ali-comment.xml"/>
     <rule ref="rulesets/java/ali-naming.xml">
         <exclude name="ArrayNamingShouldHaveBracketRule"/>
-        <exclude name="LowerCamelCaseVariableNamingRule"/>
-    </rule>
-    <!-- 因为原来的LowerCamelCaseVariableNamingRule没有对配置文件中的内容进行读取，所以只能写一个增强扩展，替换原来校验规则 -->
-    <rule name="LowerCamelCaseVariableNamingRule"
-          language="java"
-          since="1.6"
-          message="java.naming.LowerCamelCaseVariableNamingRule.rule.msg"
-          class="io.github.godfather1103.rule.ext.LowerCamelCaseVariableNamingRuleExt">
-        <priority>2</priority>
     </rule>
     <rule ref="rulesets/java/ali-constant.xml">
         <exclude name="UpperEllRule"/>
