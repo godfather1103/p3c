@@ -15,19 +15,19 @@
  */
 package com.alibaba.p3c.pmd.lang.java.rule.naming;
 
-import java.util.regex.Pattern;
-
 import com.alibaba.p3c.pmd.I18nResources;
 import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule;
 import com.alibaba.p3c.pmd.lang.java.util.StringAndCharConstants;
 import com.alibaba.p3c.pmd.lang.java.util.ViolationUtils;
-
+import com.alibaba.p3c.pmd.lang.java.util.namelist.NameListConfig;
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator;
-import net.sourceforge.pmd.lang.java.ast.ASTTypeDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
+import net.sourceforge.pmd.lang.java.ast.*;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * [Mandatory] Method names, parameter names, member variable names, and local variable names should be written in
@@ -39,7 +39,23 @@ import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
 public class LowerCamelCaseVariableNamingRule extends AbstractAliRule {
 
     private static final String MESSAGE_KEY_PREFIX = "java.naming.LowerCamelCaseVariableNamingRule.violation.msg";
-    private Pattern pattern = Pattern.compile("^[a-z][a-z0-9]*([A-Z][a-z0-9]+)*(DO|DTO|VO|DAO|BO|DOList|DTOList|VOList|DAOList|BOList|X|Y|Z|UDF|UDAF|[A-Z])?$");
+    private static Pattern pattern;
+
+    static {
+        makePattern(
+                NameListConfig.NAME_LIST_SERVICE
+                        .getNameList("LowerCamelCaseVariableNamingRule", "WHITE_LIST")
+        );
+    }
+
+    public static void makePattern(List<String> list) {
+        Set<String> set = new HashSet<>(0);
+        if (list != null && !list.isEmpty()) {
+            set.addAll(list);
+        }
+        set.addAll(Arrays.asList("DO|DTO|VO|DAO|BO|DOList|DTOList|VOList|DAOList|BOList|X|Y|Z|UDF|UDAF|[A-Z]".split("\\|")));
+        pattern = Pattern.compile("^[a-z][a-z0-9]*([A-Z][a-z0-9]+)*(" + String.join("|", set) + ")?$");
+    }
 
     @Override
     public Object visit(final ASTVariableDeclaratorId node, Object data) {
@@ -56,7 +72,7 @@ public class LowerCamelCaseVariableNamingRule extends AbstractAliRule {
 
         ASTFieldDeclaration astFieldDeclaration = node.getFirstParentOfType(ASTFieldDeclaration.class);
         boolean isNotCheck = astFieldDeclaration != null && (astFieldDeclaration.isFinal() || astFieldDeclaration
-            .isStatic());
+                .isStatic());
         if (isNotCheck) {
             return super.visit(node, data);
         }
@@ -64,7 +80,7 @@ public class LowerCamelCaseVariableNamingRule extends AbstractAliRule {
         // variable naming violate lowerCamelCase
         if (!(pattern.matcher(node.getImage()).matches())) {
             ViolationUtils.addViolationWithPrecisePosition(this, node, data,
-                I18nResources.getMessage(MESSAGE_KEY_PREFIX + ".variable", node.getImage()));
+                    I18nResources.getMessage(MESSAGE_KEY_PREFIX + ".variable", node.getImage()));
         }
         return super.visit(node, data);
     }
@@ -74,7 +90,7 @@ public class LowerCamelCaseVariableNamingRule extends AbstractAliRule {
         if (!variableNamingStartOrEndWithDollarAndUnderLine(node.getImage())) {
             if (!(pattern.matcher(node.getImage()).matches())) {
                 ViolationUtils.addViolationWithPrecisePosition(this, node, data,
-                    I18nResources.getMessage(MESSAGE_KEY_PREFIX + ".method", node.getImage()));
+                        I18nResources.getMessage(MESSAGE_KEY_PREFIX + ".method", node.getImage()));
             }
         }
         return super.visit(node, data);
@@ -88,6 +104,6 @@ public class LowerCamelCaseVariableNamingRule extends AbstractAliRule {
 
     private boolean variableNamingStartOrEndWithDollarAndUnderLine(String variable) {
         return variable.startsWith(StringAndCharConstants.DOLLAR)
-            || variable.startsWith(StringAndCharConstants.UNDERSCORE);
+                || variable.startsWith(StringAndCharConstants.UNDERSCORE);
     }
 }
