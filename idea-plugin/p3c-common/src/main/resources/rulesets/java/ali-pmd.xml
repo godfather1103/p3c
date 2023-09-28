@@ -23,4 +23,11 @@
     <rule ref="rulesets/java/ali-flowcontrol.xml">
         <exclude name="NeedBraceRule"/>
     </rule>
+
+    <rule name="HelloWordClassMissHelloWordMethodRule"
+          language="java"
+          since="1.6"
+          message="demo.HelloWordClassMissHelloWordMethodRule.violation.msg" class="demo.HelloWordClassMissHelloWordMethodRule">
+        <priority>5</priority>
+    </rule>
 </ruleset>

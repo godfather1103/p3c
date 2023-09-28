@@ -560,4 +560,10 @@ Positive example:
         <![CDATA[To judge the equivalence of floating-point numbers, == cannot be used for primitive types, while equals cannot be used for wrapper classes.]]>
     </entry>
 
+    <entry key="demo.HelloWordClassMissHelloWordMethodRule.violation.msg">
+        <![CDATA[
+the name of a class contains HelloWord, the class must have a method called helloword.
+        ]]>
+    </entry>
+
 </properties>

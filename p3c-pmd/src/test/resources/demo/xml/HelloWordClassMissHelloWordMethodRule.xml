@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data xmlns="http://pmd.sourceforge.net/rule-tests"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://pmd.sourceforge.net/rule-tests https://pmd.sourceforge.io/rule-tests_1_0_0.xsd">
+    <code-fragment id="finally-has-return">
+        <![CDATA[
+	public class ExampleHelloWord1 {
+	    public int fn() {
+	    	try {
+	    	    return 1;
+	    	} finally {
+	    		return 0;
+	    	}
+	    }
+	}
+		]]>
+    </code-fragment>
+    <test-code>
+        <description>the class not exist helloword</description>
+        <expected-problems>1</expected-problems>
+        <code-ref id="finally-has-return"/>
+    </test-code>
+
+    <code-fragment id="have-helloword">
+        <![CDATA[
+	public class ExampleHelloWord2 {
+	    public int helloword() {
+	    	try {
+	    	    return 1;
+	    	} finally {
+	    		return 0;
+	    	}
+	    }
+	}
+		]]>
+    </code-fragment>
+    <test-code>
+        <description>the class exist helloword</description>
+        <expected-problems>0</expected-problems>
+        <code-ref id="have-helloword"/>
+    </test-code>
+</test-data>
