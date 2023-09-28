@@ -166,9 +166,9 @@ Note: In JDK8, Instant can be used to replace Date, Calendar is replaced by Loca
         <![CDATA[
 Note: Below are the problems created by usage of Executors for thread pool creation:
 1) FixedThreadPool and SingleThreadPool:
- Maximum request queue size Integer.MAX_VALUE. A large number of requests might cause OOM.
+ Maximum request queue size Integer.MAX_VALUE. A large number of requests might cause OOM.
 2) CachedThreadPool:
- The number of threads which are allowed to be created is Integer.MAX_VALUE. Creating too many threads might lead to OOM.]]>
+ The number of threads which are allowed to be created is Integer.MAX_VALUE. Creating too many threads might lead to OOM.]]>
     </entry>
 
     <entry key="java.concurrent.ThreadShouldSetNameRule.violation.msg.ThreadPoolExecutor">
@@ -308,9 +308,9 @@ Explain 3: It is possible that when implementing the lock() method in Lock objec
     <entry key="java.oop.PojoMustUsePrimitiveFieldRule.rule.msg">
         <![CDATA[
  Rules for using primitive data types and wrapper classes:
- 1) Members of a POJO class must be wrapper classes.
- 2) The return value and arguments of a RPC method must be wrapper classes.
- 3) [Recommended] Local variables should be primitive data types.
+ 1) Members of a POJO class must be wrapper classes.
+ 2) The return value and arguments of a RPC method must be wrapper classes.
+ 3) [Recommended] Local variables should be primitive data types.
         ]]>
     </entry>
     <entry key="java.oop.PojoMustUsePrimitiveFieldRule.rule.msg.desc">

@@ -38,7 +38,7 @@ Note: Using thread pool can reduce the time of creating and destroying thread an
 * 4 ``[Mandatory]`` A thread pool should be created by ThreadPoolExecutor rather than Executors. These would make the parameters of the thread pool understandable. It would also reduce the risk of running out of system resources.
 Note: Below are the problems created by usage of Executors for thread pool creation:  
     1. FixedThreadPool and SingleThreadPool:
-         Maximum request queue size Integer.MAX_VALUE. A large number of requests might cause OOM.
+         Maximum request queue size Integer.MAX_VALUE. A large number of requests might cause OOM.
     2. CachedThreadPool and ScheduledThreadPool:  
         The number of threads which are allowed to be created is Integer.MAX_VALUE. Creating too many threads might lead to OOM.
 * 5 ``[Mandatory]`` SimpleDataFormat is unsafe, do not define it as a static variable. If you have to, lock or Apache DateUtils class must be used.
@@ -172,8 +172,8 @@ Note: Consider this assignment: Integer var = ?. When it fits the range from -12
     2. The return value and arguments of a RPC method must be wrapper classes.
     3. ``[Recommended]`` Local variables should be primitive data types.    
 Note: In order to remind the consumer of explicit assignments, there are no initial values for members in a POJO class. As a consumer, you should check problems such as NullPointerException and warehouse entries for yourself.
- Positive example: As the result of a database query may be null, assigning it to a primitive date type will cause a risk of NullPointerException because of Unboxing.  
- Counter example: Consider the output of a transaction volume's amplitude, like ±x%. As a primitive data, when it comes to a failure of calling a RPC service, the default return value: 0% will be assigned, which is not correct. A hyphen like - should be assigned instead. Therefore, the null value of a wrapper class can represent additional information, such as a failure of calling a RPC service, an abnormal exit, etc.
+ Positive example: As the result of a database query may be null, assigning it to a primitive date type will cause a risk of NullPointerException because of Unboxing.  
+ Counter example: Consider the output of a transaction volume's amplitude, like ±x%. As a primitive data, when it comes to a failure of calling a RPC service, the default return value: 0% will be assigned, which is not correct. A hyphen like - should be assigned instead. Therefore, the null value of a wrapper class can represent additional information, such as a failure of calling a RPC service, an abnormal exit, etc.
 * 5 ``[Mandatory]`` While defining POJO classes like DO, DTO, VO, etc., do not assign any default values to the members.  
 * 6 ``[Mandatory]`` The toString method must be implemented in a POJO class. The super.toString method should be called in front of the whole implementation if the current class extends another POJO class.  
 Note: We can call the toString method in a POJO directly to print property values in order to check the problem when a method throws an exception in runtime.
@@ -224,13 +224,13 @@ Note: The negation operator is not easy to be quickly understood. There must be
 * 2 ``[Mandatory]`` Never use return within a finally block. A return statement in a finally block will cause exceptions or result in a discarded return value in the try-catch block.
 * 3 ``[Recommended]`` One of the most common errors is NullPointerException. Pay attention to the following situations:
     * 1 If the return type is primitive, return a value of wrapper class may cause NullPointerException.
-      Counter example: public int f() { return Integer } Unboxing a null value will throw a NullPointerException.
+      Counter example: public int f() { return Integer } Unboxing a null value will throw a NullPointerException.
     * 2 The return value of a database query might be null.
     * 3 Elements in collection may be null, even though Collection.isEmpty() returns false.
     * 4 Return values from an RPC might be null.
     * 5 Data stored in sessions might by null.
     * 6 Method chaining, like obj.getA().getB().getC(), is likely to cause NullPointerException.  
-      Positive example: Use Optional to avoid null check and NPE (Java 8+).
+      Positive example: Use Optional to avoid null check and NPE (Java 8+).
 
 ### <font color="green">Code Comments</font>
 * 1 ``[Mandatory]`` Javadoc should be used for classes, class variables and methods. The format should be '/** comment **/', rather than '// xxx'.  

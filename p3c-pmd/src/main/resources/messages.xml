@@ -164,9 +164,9 @@
         <![CDATA[
 说明：Executors返回的线程池对象的弊端如下：
 1）FixedThreadPool和SingleThreadPool:
-  允许的请求队列长度为Integer.MAX_VALUE，可能会堆积大量的请求，从而导致OOM。
+  允许的请求队列长度为Integer.MAX_VALUE，可能会堆积大量的请求，从而导致OOM。
 2）CachedThreadPool:
-  允许的创建线程数量为Integer.MAX_VALUE，可能会创建大量的线程，从而导致OOM。]]>
+  允许的创建线程数量为Integer.MAX_VALUE，可能会创建大量的线程，从而导致OOM。]]>
     </entry>
 
     <entry key="java.concurrent.ThreadShouldSetNameRule.violation.msg.ThreadPoolExecutor">
@@ -308,9 +308,9 @@
     <entry key="java.oop.PojoMustUsePrimitiveFieldRule.rule.msg">
         <![CDATA[
 关于基本数据类型与包装数据类型的使用标准如下：
- 1） 所有的POJO类属性必须使用包装数据类型。
- 2） RPC方法的返回值和参数必须使用包装数据类型。
- 3） 所有的局部变量推荐使用基本数据类型。
+ 1） 所有的POJO类属性必须使用包装数据类型。
+ 2） RPC方法的返回值和参数必须使用包装数据类型。
+ 3） 所有的局部变量推荐使用基本数据类型。
         ]]>
     </entry>
     <entry key="java.oop.PojoMustUsePrimitiveFieldRule.rule.msg.desc">
