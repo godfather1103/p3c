@@ -96,9 +96,9 @@ Counter example: For getObject() and get0bject(), the first one has a letter 'O'
 <body>
 Custom class must override 'hashCode' and 'equals' while use as key for Map or value for Set.<br>
 The usage of hashCode and equals should follow:<br/>
- 1) Override hashCode if equals is overridden.<br/>
- 2) These two methods must be overridden for Set since they are used to ensure that no duplicate object will be inserted in Set.<br/>
- 3) These two methods must be overridden if self-defined object is used as the key of Map.<br/>
+ 1) Override hashCode if equals is overridden.<br/>
+ 2) These two methods must be overridden for Set since they are used to ensure that no duplicate object will be inserted in Set.<br/>
+ 3) These two methods must be overridden if self-defined object is used as the key of Map.<br/>
 Note: String can be used as the key of Map since these two methods have been rewritten.
 </body>
 </html>
