@@ -41,6 +41,7 @@ tasks {
         1.4
         <li>pmd工具升级到6.55.0</li>
         <li>p3c-pmd改为直接编译,替换官方的版本</li>
+        <li>p3c-pmd代码优化，清除一些过时的调用</li>
         <li>fix(<a href="https://github.com/godfather1103/p3c/issues/9">issues-9</a>): 1、优化Record类的检测；2、优化Switch的default块判断</li>
         <li>fix(<a href="https://github.com/godfather1103/p3c/issues/6">issues-6</a>): 增加对Record类的检测</li>
         </ul>
