@@ -18,7 +18,6 @@ package com.alibaba.p3c.pmd.lang.java.rule.other;
 import com.alibaba.p3c.pmd.I18nResources;
 import com.alibaba.p3c.pmd.lang.AbstractXpathRule;
 import com.alibaba.p3c.pmd.lang.java.util.ViolationUtils;
-
 import net.sourceforge.pmd.lang.ast.Node;
 
 /**
@@ -33,9 +32,9 @@ public class AvoidNewDateGetTimeRule extends AbstractXpathRule {
         "//PrimaryExpression"
             + "["
             + "PrimaryPrefix/AllocationExpression/ClassOrInterfaceType[@Image='Date'] and "
-            + "PrimaryPrefix/AllocationExpression/Arguments[@ArgumentCount=0] and "
+            + "PrimaryPrefix/AllocationExpression/Arguments[@Size=0] and "
             + "PrimarySuffix[@Image='getTime'] and "
-            + "PrimarySuffix/Arguments[@ArgumentCount=0]"
+            + "PrimarySuffix/Arguments[@Size=0]"
             + "]";
 
     public AvoidNewDateGetTimeRule() {
