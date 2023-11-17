@@ -39,13 +39,15 @@ import java.util.regex.Pattern;
 public class LowerCamelCaseVariableNamingRule extends AbstractAliRule {
 
     private static final String MESSAGE_KEY_PREFIX = "java.naming.LowerCamelCaseVariableNamingRule.violation.msg";
-    private static Pattern pattern;
+    private static Pattern pattern = null;
 
-    static {
-        makePattern(
-                NameListConfig.NAME_LIST_SERVICE
-                        .getNameList("LowerCamelCaseVariableNamingRule", "WHITE_LIST")
-        );
+    public LowerCamelCaseVariableNamingRule() {
+        if (pattern == null) {
+            makePattern(
+                    NameListConfig.NAME_LIST_SERVICE
+                            .getNameList("LowerCamelCaseVariableNamingRule", "WHITE_LIST")
+            );
+        }
     }
 
     public static void makePattern(List<String> list) {
