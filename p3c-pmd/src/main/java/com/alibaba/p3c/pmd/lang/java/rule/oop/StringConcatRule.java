@@ -15,24 +15,16 @@
  */
 package com.alibaba.p3c.pmd.lang.java.rule.oop;
 
-import java.util.List;
-
 import com.alibaba.p3c.pmd.I18nResources;
 import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule;
 import com.alibaba.p3c.pmd.lang.java.util.NumberConstants;
 import com.alibaba.p3c.pmd.lang.java.util.ViolationUtils;
-
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTAdditiveExpression;
-import net.sourceforge.pmd.lang.java.ast.ASTDoStatement;
-import net.sourceforge.pmd.lang.java.ast.ASTForStatement;
-import net.sourceforge.pmd.lang.java.ast.ASTName;
-import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression;
-import net.sourceforge.pmd.lang.java.ast.ASTStatementExpression;
-import net.sourceforge.pmd.lang.java.ast.ASTWhileStatement;
-import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
+import net.sourceforge.pmd.lang.java.ast.*;
 import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.jaxen.JaxenException;
+
+import java.util.List;
 
 /**
  * [Recommended] Use the append method in StringBuilder inside a loop body when concatenating multiple strings.
@@ -43,7 +35,7 @@ import org.jaxen.JaxenException;
 public class StringConcatRule extends AbstractAliRule {
 
     private static final String XPATH =
-        "Statement/Block//Expression[preceding-sibling::AssignmentOperator]/AdditiveExpression[(@Image = '+') and "
+        "Statement/Block//Expression[preceding-sibling::AssignmentOperator]/AdditiveExpression[(@Operator = '+') and "
             + "count(./PrimaryExpression/PrimaryPrefix/Literal[@StringLiteral = 'true']) > 0]";
 
     @Override
