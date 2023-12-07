@@ -26,8 +26,11 @@ import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil
 import com.intellij.codeInsight.daemon.impl.analysis.JavaHighlightUtil
 import com.intellij.codeInsight.daemon.impl.quickfix.AccessStaticViaInstanceFix
 import com.intellij.codeInsight.daemon.impl.quickfix.RemoveUnusedVariableUtil
+import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.codeInspection.accessStaticViaInstance.AccessStaticViaInstance
+import com.intellij.modcommand.ActionContext
+import com.intellij.modcommand.Presentation
 import com.intellij.psi.*
 
 /**
@@ -56,19 +59,11 @@ class AliAccessStaticViaInstanceInspection(any: Any?) : AccessStaticViaInstance(
 
     override fun createAccessStaticViaInstanceFix(
         expr: PsiReferenceExpression,
-        onTheFly: Boolean,
         result: JavaResolveResult
-    ): AccessStaticViaInstanceFix {
-        return object : AccessStaticViaInstanceFix(expr, result, onTheFly) {
-
+    ): LocalQuickFix {
+        val entity = object : AccessStaticViaInstanceFix(expr, result) {
             val fixKey = "com.alibaba.p3c.idea.quickfix.standalone.AliAccessStaticViaInstanceInspection"
-
             val resultText = calcText(result.element as PsiMember, result.substitutor)
-
-            override fun getText(): String {
-                return resultText
-            }
-
             private fun calcText(member: PsiMember, substitutor: PsiSubstitutor): String {
                 val aClass = member.containingClass ?: return ""
                 val p3cConfig = P3cConfig::class.java.getService()
@@ -86,7 +81,12 @@ class AliAccessStaticViaInstanceInspection(any: Any?) : AccessStaticViaInstance(
                     )
                 }
             }
+
+            override fun getPresentation(context: ActionContext, ref: PsiReferenceExpression): Presentation? {
+                return Presentation.of(resultText)
+            }
         }
+        return LocalQuickFix.from(entity)!!
     }
 
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
@@ -136,7 +136,7 @@ class AliAccessStaticViaInstanceInspection(any: Any?) : AccessStaticViaInstance(
                 return
             }
         }
-        holder.registerProblem(expr, description, createAccessStaticViaInstanceFix(expr, onTheFly, result))
+        holder.registerProblem(expr, description, createAccessStaticViaInstanceFix(expr, result))
     }
 
 }
