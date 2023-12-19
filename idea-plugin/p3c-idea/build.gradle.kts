@@ -80,10 +80,10 @@ tasks {
 
 }
 
-if (publishChannel.isNotEmpty()) {
-    version = "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}-${publishChannel}"
+version = if (publishChannel.isNotEmpty()) {
+    "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}-${publishChannel}"
 } else {
-    version = "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}"
+    "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}"
 }
 
 dependencies {
