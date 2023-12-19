@@ -22,6 +22,7 @@ import com.alibaba.p3c.pmd.lang.java.util.ViolationUtils;
 import com.alibaba.p3c.pmd.lang.java.util.namelist.NameListConfig;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -41,6 +42,8 @@ public class LowerCamelCaseVariableNamingRule extends AbstractAliRule {
     private static final String MESSAGE_KEY_PREFIX = "java.naming.LowerCamelCaseVariableNamingRule.violation.msg";
     private static Pattern pattern = null;
 
+    private static String clearList = "";
+
     public LowerCamelCaseVariableNamingRule() {
         if (pattern == null) {
             makePattern(
@@ -54,6 +57,9 @@ public class LowerCamelCaseVariableNamingRule extends AbstractAliRule {
         Set<String> set = new HashSet<>(0);
         if (list != null && !list.isEmpty()) {
             set.addAll(list);
+            clearList = String.join("|", list);
+        } else {
+            clearList = "";
         }
         set.addAll(Arrays.asList("DO|DTO|VO|DAO|BO|DOList|DTOList|VOList|DAOList|BOList|X|Y|Z|UDF|UDAF|[A-Z]".split("\\|")));
         pattern = Pattern.compile("^[a-z][a-z0-9]*([A-Z][a-z0-9]+)*(" + String.join("|", set) + ")?$");
@@ -78,21 +84,28 @@ public class LowerCamelCaseVariableNamingRule extends AbstractAliRule {
         if (isNotCheck) {
             return super.visit(node, data);
         }
-
+        String name = node.getName();
+        if (StringUtils.isNotEmpty(clearList)) {
+            name = name.replaceAll(clearList, "");
+        }
         // variable naming violate lowerCamelCase
-        if (!(pattern.matcher(node.getImage()).matches())) {
+        if (!(pattern.matcher(name).matches())) {
             ViolationUtils.addViolationWithPrecisePosition(this, node, data,
-                    I18nResources.getMessage(MESSAGE_KEY_PREFIX + ".variable", node.getImage()));
+                    I18nResources.getMessage(MESSAGE_KEY_PREFIX + ".variable", name));
         }
         return super.visit(node, data);
     }
 
     @Override
     public Object visit(ASTMethodDeclarator node, Object data) {
-        if (!variableNamingStartOrEndWithDollarAndUnderLine(node.getImage())) {
-            if (!(pattern.matcher(node.getImage()).matches())) {
+        String name = node.getImage();
+        if (StringUtils.isNotEmpty(clearList)) {
+            name = name.replaceAll(clearList, "");
+        }
+        if (!variableNamingStartOrEndWithDollarAndUnderLine(name)) {
+            if (!(pattern.matcher(name).matches())) {
                 ViolationUtils.addViolationWithPrecisePosition(this, node, data,
-                        I18nResources.getMessage(MESSAGE_KEY_PREFIX + ".method", node.getImage()));
+                        I18nResources.getMessage(MESSAGE_KEY_PREFIX + ".method", name));
             }
         }
         return super.visit(node, data);
