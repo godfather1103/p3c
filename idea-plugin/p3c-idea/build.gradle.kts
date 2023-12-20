@@ -38,12 +38,8 @@ tasks {
         changeNotes.set(
             """
         <ul>
-        1.4
-        <li>pmd工具升级到6.55.0</li>
-        <li>p3c-pmd改为直接编译,替换官方的版本</li>
-        <li>p3c-pmd代码优化，清除一些过时的调用</li>
-        <li>fix(<a href="https://github.com/godfather1103/p3c/issues/9">issues-9</a>): 1、优化Record类的检测；2、优化Switch的default块判断</li>
-        <li>fix(<a href="https://github.com/godfather1103/p3c/issues/6">issues-6</a>): 增加对Record类的检测</li>
+        1.5
+        <li>fix(<a href="https://github.com/godfather1103/p3c/issues/27">issues-27</a>): 优化对于方法名的驼峰校验</li>
         </ul>
         """.trimIndent()
         )
@@ -80,10 +76,10 @@ tasks {
 
 }
 
-if (publishChannel.isNotEmpty()) {
-    version = "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}-${publishChannel}"
+version = if (publishChannel.isNotEmpty()) {
+    "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}-${publishChannel}"
 } else {
-    version = "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}"
+    "${property("plugin_version")}-${ideaVersion}-${property("p3c_pmd_version")}"
 }
 
 dependencies {
