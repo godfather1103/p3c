@@ -16,10 +16,17 @@
 package com.alibaba.p3c.pmd.lang.java.rule.naming;
 
 import com.alibaba.p3c.pmd.I18nResources;
-import com.alibaba.p3c.pmd.lang.AbstractXpathRule;
+import com.alibaba.p3c.pmd.lang.java.rule.AbstractPojoRule;
+import com.alibaba.p3c.pmd.lang.java.util.VariableUtils;
 import com.alibaba.p3c.pmd.lang.java.util.ViolationUtils;
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
+import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTRecordComponent;
+import net.sourceforge.pmd.lang.java.ast.ASTRecordDeclaration;
+import org.jaxen.JaxenException;
+
+import java.util.List;
 
 /**
  * [Mandatory] Do not add 'is' as prefix while defining Boolean variable, since it may cause a serialization exception
@@ -28,24 +35,57 @@ import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
  * @author changle.lq
  * @date 2017/04/16
  */
-public class BooleanPropertyShouldNotStartWithIsRule extends AbstractXpathRule {
-    private static final String XPATH = "//VariableDeclaratorId[(ancestor::ClassOrInterfaceDeclaration)["
-        + "@Interface='false' and ( ends-with(@SimpleName, 'DO') or ends-with(@SimpleName, 'DTO')"
-        + " or ends-with(@SimpleName, 'VO') or ends-with(@SimpleName, 'DAO'))]]"
-        + "[../../../FieldDeclaration/Type/PrimitiveType[@Image = 'boolean']][.[ starts-with(@Image, 'is')]]";
+public class BooleanPropertyShouldNotStartWithIsRule extends AbstractPojoRule {
 
-    public BooleanPropertyShouldNotStartWithIsRule() {
-        setXPath(XPATH);
+    @Override
+    public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
+        try {
+            List<Node> fields = node.findChildNodesWithXPath(
+                    "ClassOrInterfaceBody/ClassOrInterfaceBodyDeclaration/FieldDeclaration");
+            for (Node fieldNode : fields) {
+                ASTFieldDeclaration field = (ASTFieldDeclaration) fieldNode;
+                String typeName = field.getType().getName();
+                if (typeName.toLowerCase().endsWith("boolean")) {
+                    String name = VariableUtils.getVariableName(field);
+                    if (name != null && name.startsWith("is")) {
+                        ViolationUtils.addViolationWithPrecisePosition(
+                                this,
+                                field,
+                                data,
+                                I18nResources.getMessage("java.naming.BooleanPropertyShouldNotStartWithIsRule.violation.msg", name)
+                        );
+                    }
+                }
+            }
+            return super.visit(node, data);
+        } catch (JaxenException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
     @Override
-    public void addViolation(Object data, Node node, String arg) {
-        if (node instanceof ASTVariableDeclaratorId) {
-            ViolationUtils.addViolationWithPrecisePosition(this, node, data,
-                I18nResources.getMessage("java.naming.BooleanPropertyShouldNotStartWithIsRule.violation.msg",
-                    node.getImage()));
-        } else {
-            super.addViolation(data, node, arg);
+    public Object visit(ASTRecordDeclaration node, Object data) {
+        try {
+            List<Node> fields = node.findChildNodesWithXPath(
+                    "RecordComponentList/RecordComponent");
+            for (Node fieldNode : fields) {
+                ASTRecordComponent component = (ASTRecordComponent) fieldNode;
+                String typeName = component.getTypeNode().getTypeImage();
+                if (typeName.toLowerCase().endsWith("boolean")) {
+                    String name = component.getVarId().getName();
+                    if (name != null && name.startsWith("is")) {
+                        ViolationUtils.addViolationWithPrecisePosition(
+                                this,
+                                component,
+                                data,
+                                I18nResources.getMessage("java.naming.BooleanPropertyShouldNotStartWithIsRule.violation.msg", name)
+                        );
+                    }
+                }
+            }
+            return super.visit(node, data);
+        } catch (JaxenException e) {
+            throw new RuntimeException(e);
         }
     }
 }

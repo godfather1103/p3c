@@ -5,11 +5,14 @@
         <![CDATA[
   public class BooleanPropertyNamingRuleTestDO{
     private boolean issuccess;
-    private boolean issuccess1;
+    private Boolean issuccess1;
     private boolean success;
+    private Boolean success1;
     public void sayHello (int i) {
      boolean issuccess1;
      boolean success1;
+     Boolean issuccess2;
+     Boolean success2;
     }
 }
     ]]>
@@ -21,11 +24,30 @@
         <code-ref id="boolean-property-in-POJO-class" />
     </test-code>
 
+    <code-fragment id="boolean-property-in-POJO-record-class">
+        <![CDATA[
+  record BooleanPropertyNamingRuleTestDO(
+  boolean issuccess,
+  Boolean issuccess1,
+  boolean success,
+  Boolean success1
+  ){
+  }
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>issuccess should not contain is</description>
+        <expected-problems>2</expected-problems>
+        <expected-linenumbers>2,3</expected-linenumbers>
+        <code-ref id="boolean-property-in-POJO-record-class" />
+    </test-code>
+
 
     <code-fragment id="boolean-property-in-POJO-class1">
         <![CDATA[
   public class BooleanPropertyNamingRuleTest{
     private boolean success;
+    private Boolean success1;
     public void sayHello (int i) {
      boolean success1;
     }
@@ -42,6 +64,7 @@
         <![CDATA[
 public class ProcessBuilder {
   public static final boolean isWindows = isWindows();
+  public static final Boolean isWindows1 = isWindows();
 }
     ]]>
     </code-fragment>

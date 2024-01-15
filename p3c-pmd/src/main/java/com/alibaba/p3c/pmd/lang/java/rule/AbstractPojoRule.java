@@ -18,6 +18,7 @@ package com.alibaba.p3c.pmd.lang.java.rule;
 import com.alibaba.p3c.pmd.lang.java.util.PojoUtils;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.lang.java.ast.ASTRecordDeclaration;
 import net.sourceforge.pmd.lang.java.ast.AbstractAnyTypeDeclaration;
 
 import java.util.List;
@@ -54,6 +55,7 @@ public abstract class AbstractPojoRule extends AbstractAliRule {
      * @return
      */
     private boolean hasPojoInJavaFile(ASTCompilationUnit node) {
+        // 普通java类
         List<ASTClassOrInterfaceDeclaration> klasses = node.findDescendantsOfType(
                 ASTClassOrInterfaceDeclaration.class);
         for (ASTClassOrInterfaceDeclaration klass : klasses) {
@@ -61,14 +63,21 @@ public abstract class AbstractPojoRule extends AbstractAliRule {
                 return true;
             }
         }
-        return false;
+
+        // Record类 都是POJO
+        return !node.findDescendantsOfType(
+                ASTRecordDeclaration.class).isEmpty();
     }
 
-//    protected boolean isPojo(ASTClassOrInterfaceDeclaration node) {
-//        return PojoUtils.isPojo(node);
-//    }
 
     protected boolean isPojo(AbstractAnyTypeDeclaration node) {
-        return node != null && PojoUtils.isPojo(node.getSimpleName());
+        if (node == null) {
+            return false;
+        } else if (node instanceof ASTRecordDeclaration) {
+            // Record类 都是POJO
+            return true;
+        } else {
+            return PojoUtils.isPojo(node.getSimpleName());
+        }
     }
 }
