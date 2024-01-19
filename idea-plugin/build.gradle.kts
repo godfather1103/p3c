@@ -19,8 +19,11 @@ buildscript {
     }
 }
 
-val ideaVersion = property("idea_version") as String
-
+val ideaVersion = System.getProperty(
+    "idea_version",
+    property("idea_version") as String
+)!!
+println("构建的目标版本为:${ideaVersion}")
 val yearVersion = ideaVersion
     .split(".")
     .first()
