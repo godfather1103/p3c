@@ -44,6 +44,7 @@ ClassNamingShouldBeCamelRule_CLASS_NAMING_WHITE_LIST=["Hbase","HBase","ID"]
 
 ### 本地
 
+- [issues-29](https://github.com/godfather1103/p3c/issues/29)
 - [issues-27](https://github.com/godfather1103/p3c/issues/27)
 
 ### 官方
