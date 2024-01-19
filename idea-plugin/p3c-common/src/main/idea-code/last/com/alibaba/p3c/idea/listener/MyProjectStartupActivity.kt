@@ -13,6 +13,7 @@ import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
 import com.intellij.openapi.startup.ProjectActivity
+import com.flag.Version
 
 class MyProjectStartupActivity : ProjectActivity, ProjectManagerListener {
 
@@ -20,6 +21,7 @@ class MyProjectStartupActivity : ProjectActivity, ProjectManagerListener {
 
     override suspend fun execute(project: Project) {
         registerStandard()
+        println("this is ${Version.version()}")
         I18nResources.changeLanguage(p3cConfig.locale)
         val analyticsGroup = ActionManager.getInstance().getAction(analyticsGroupId)
         analyticsGroup.templatePresentation.text = P3cBundle.getMessage(analyticsGroupText)

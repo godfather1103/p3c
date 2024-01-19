@@ -8,6 +8,7 @@ import com.alibaba.p3c.idea.util.HighlightInfoTypes
 import com.alibaba.p3c.idea.util.HighlightSeverities
 import com.alibaba.p3c.pmd.I18nResources
 import com.alibaba.smartfox.idea.common.util.getService
+import com.flag.Version232
 import com.intellij.codeInsight.daemon.impl.SeverityRegistrar
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.project.Project
@@ -20,6 +21,7 @@ class MyProjectStartupActivity : ProjectActivity, ProjectManagerListener {
 
     override suspend fun execute(project: Project) {
         registerStandard()
+        println("this is ${Version232.version()}")
         I18nResources.changeLanguage(p3cConfig.locale)
         val analyticsGroup = ActionManager.getInstance().getAction(analyticsGroupId)
         analyticsGroup.templatePresentation.text = P3cBundle.getMessage(analyticsGroupText)
