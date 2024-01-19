@@ -14,6 +14,33 @@ java {
 
 val ideaVersion = rootProject.ext.get("ideaVersion") as String
 val myPlugins = rootProject.ext.get("myPlugins") as Set<*>
+val yearVersion = rootProject.ext.get("yearVersion") as Int
+val noVersion = rootProject.ext.get("noVersion") as Int
+if (yearVersion <= 22) {
+    sourceSets {
+        main {
+            kotlin {
+                srcDirs("src/main/idea-code/223")
+            }
+        }
+    }
+} else if (yearVersion == 23 && noVersion < 3) {
+    sourceSets {
+        main {
+            kotlin {
+                srcDirs("src/main/idea-code/232")
+            }
+        }
+    }
+} else {
+    sourceSets {
+        main {
+            kotlin {
+                srcDirs("src/main/idea-code/last")
+            }
+        }
+    }
+}
 
 intellij {
     version.set(ideaVersion)
