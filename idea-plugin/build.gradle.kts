@@ -24,13 +24,10 @@ val ideaVersion = System.getProperty(
     property("idea_version") as String
 )!!
 println("构建的目标版本为:${ideaVersion}")
-val yearVersion = ideaVersion
-    .split(".")
-    .first()
-    .substring(2)
-    .toInt()
 
-val noVersion = ideaVersion
+val first = ideaVersion.split("[.-]".toRegex()).first().toInt()
+val yearVersion = first.let { if (it > 2000) it % 100 else it / 10 }
+val noVersion = if (first < 2000) first % 10 else ideaVersion
     .substring(ideaVersion.indexOf(".") + 1)
     .toInt()
 
