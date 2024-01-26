@@ -51,6 +51,8 @@ tasks {
         }
         if (publishChannel.isNotEmpty()) {
             channels.set(listOf(publishChannel))
+        } else if (ideaVersion.contains("EAP-SNAPSHOT")) {
+            channels.set(listOf("beta"))
         }
     }
 
