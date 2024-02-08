@@ -52,7 +52,7 @@ ClassNamingShouldBeCamelRule_CLASS_NAMING_WHITE_LIST=["Hbase","HBase","ID"]
 - [issues-898](https://github.com/alibaba/p3c/issues/898)
 - [issues-900](https://github.com/alibaba/p3c/issues/900)
 
-### 群组(Group)
+# 群组(Group)
 
 使用过程中如有疑问，可以加群提问
 
