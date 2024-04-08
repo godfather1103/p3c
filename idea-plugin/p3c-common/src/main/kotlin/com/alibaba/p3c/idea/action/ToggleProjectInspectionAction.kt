@@ -20,6 +20,7 @@ import com.alibaba.p3c.idea.compatible.inspection.Inspections
 import com.alibaba.p3c.idea.config.SmartFoxProjectConfig
 import com.alibaba.p3c.idea.i18n.P3cBundle
 import com.alibaba.p3c.idea.inspection.AliBaseInspection
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import icons.P3cIcons
@@ -34,6 +35,8 @@ import icons.P3cIcons
 class ToggleProjectInspectionAction : AnAction() {
 
     private val textKey = "com.alibaba.p3c.idea.action.ToggleProjectInspectionAction.text"
+
+    override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
