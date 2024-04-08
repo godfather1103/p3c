@@ -38,8 +38,8 @@ tasks {
         changeNotes.set(
             """
         <ul>
-        1.6
-        <li>fix(<a href="https://github.com/godfather1103/p3c/issues/29">issues-29</a>): 优化对应布尔类型属性名的判断</li>
+        1.7
+        <li>fix(<a href="https://github.com/godfather1103/p3c/issues/43">issues-43</a>): 增加方法重写</li>
         </ul>
         """.trimIndent()
         )
