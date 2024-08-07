@@ -19,6 +19,7 @@ import com.alibaba.p3c.idea.action.AliPmdCodeInspectionAction
 import com.alibaba.p3c.idea.compatible.inspection.Inspections
 import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.inspection.AliBaseInspection
+import com.alibaba.p3c.idea.util.CheckinHandlerUtil
 import com.alibaba.smartfox.idea.common.util.BalloonNotifications
 import com.alibaba.smartfox.idea.common.util.getService
 import com.intellij.analysis.AnalysisScope
@@ -40,7 +41,6 @@ import com.intellij.openapi.vcs.CheckinProjectPanel
 import com.intellij.openapi.vcs.VcsBundle
 import com.intellij.openapi.vcs.changes.CommitExecutor
 import com.intellij.openapi.vcs.checkin.CheckinHandler
-import com.intellij.openapi.vcs.checkin.CheckinHandlerUtil
 import com.intellij.openapi.vcs.ui.RefreshableOnComponent
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDocumentManager

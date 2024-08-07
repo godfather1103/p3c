@@ -19,7 +19,7 @@ intellij {
 tasks {
     patchPluginXml {
         sinceBuild.set("${yearVersion}${noVersion}.0")
-        untilBuild.set("${yearVersion}${noVersion}.*")
+//        untilBuild.set("${yearVersion}${noVersion}.*")
         pluginId.set("io.github.godfather1103.alibaba.p3c")
         pluginDescription.set(
             """
