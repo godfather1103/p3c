@@ -80,4 +80,4 @@ Your gift will help me to contribute better, thank you!
 
 # Star History
 
-![Star History Chart](https://api.star-history.com/svg?repos=godfather1103/p3c&type=Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=godfather1103/p3c&type=Date)](https://star-history.com/#godfather1103/p3c&Date)
