@@ -77,3 +77,7 @@ Your gift will help me to contribute better, thank you!
 
 微信(WeChat)  
 ![微信支付](pic/WeChat-300.png)
+
+# Star History
+
+![Star History Chart](https://api.star-history.com/svg?repos=godfather1103/p3c&type=Date)
