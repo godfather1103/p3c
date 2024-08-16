@@ -38,8 +38,8 @@ tasks {
         changeNotes.set(
             """
         <ul>
-        1.7
-        <li>fix(<a href="https://github.com/godfather1103/p3c/issues/43">issues-43</a>): 增加方法重写</li>
+        1.8
+        <li>fix(<a href="https://github.com/godfather1103/p3c/issues/52">issues-52</a>): 相关属性改为懒加载</li>
         </ul>
         """.trimIndent()
         )
