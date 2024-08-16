@@ -1,5 +1,5 @@
 #!/bin/sh
-idea_versions=("2022.1" "2022.2" "2022.3" "2023.1" "2023.2" "2023.3")
+idea_versions=("2022.1" "2022.2" "2022.3" "2023.1" "2023.2" "2023.3" "2024.1")
 for version in "${idea_versions[@]}"
 do
   echo "开始构建$version"
