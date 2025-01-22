@@ -64,7 +64,6 @@ ClassNamingShouldBeCamelRule_CLASS_NAMING_WHITE_LIST=["Hbase","HBase","ID"]
 
 ![GR](pic/GR-300.jpg)
 
-
 # 捐赠(Donate)
 
 你的馈赠将助力我更好的去贡献，谢谢！  
