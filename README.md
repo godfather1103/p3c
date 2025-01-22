@@ -58,8 +58,6 @@ ClassNamingShouldBeCamelRule_CLASS_NAMING_WHITE_LIST=["Hbase","HBase","ID"]
 
 使用过程中如有疑问，可以加群提问
 
-![WXQ](pic/WXQ-300-3.jpg)
-
 个人微信，添加时备注：p3c
 
 ![GR](pic/GR-300.jpg)

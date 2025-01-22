@@ -40,7 +40,6 @@
         <notificationGroup id="SmartFox Intellij IDEA Balloon Notification" displayType="BALLOON"/>
         <notificationGroup id="SmartFox Intellij IDEA Notification" displayType="STICKY_BALLOON"/>
         <applicationService serviceImplementation="com.alibaba.p3c.idea.config.P3cConfig"/>
-        <projectService serviceImplementation="com.alibaba.p3c.idea.config.SmartFoxProjectConfig"/>
         <checkinHandlerFactory implementation="com.alibaba.p3c.idea.vcs.AliCodeAnalysisCheckinHandlerFactory"
                                order="first"/>
         <inspectionToolProvider implementation="com.alibaba.p3c.idea.inspection.AliLocalInspectionToolProvider"/>
