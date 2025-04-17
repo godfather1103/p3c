@@ -44,6 +44,9 @@ ClassNamingShouldBeCamelRule_CLASS_NAMING_WHITE_LIST=["Hbase","HBase","ID"]
 
 ### 本地
 
+- [issues-64](https://github.com/godfather1103/p3c/issues/64)
+- [issues-63](https://github.com/godfather1103/p3c/issues/63)
+- [issues-59](https://github.com/godfather1103/p3c/issues/59)
 - [issues-52](https://github.com/godfather1103/p3c/issues/52)
 - [issues-43](https://github.com/godfather1103/p3c/issues/43)
 - [issues-29](https://github.com/godfather1103/p3c/issues/29)
@@ -58,12 +61,9 @@ ClassNamingShouldBeCamelRule_CLASS_NAMING_WHITE_LIST=["Hbase","HBase","ID"]
 
 使用过程中如有疑问，可以加群提问
 
-![WXQ](pic/WXQ-300-1.jpg)
-
 个人微信，添加时备注：p3c
 
 ![GR](pic/GR-300.jpg)
-
 
 # 捐赠(Donate)
 

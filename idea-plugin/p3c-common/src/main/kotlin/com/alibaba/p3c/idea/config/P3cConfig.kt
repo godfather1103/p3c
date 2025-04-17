@@ -15,6 +15,7 @@
  */
 package com.alibaba.p3c.idea.config
 
+import com.alibaba.p3c.pmd.I18nResources
 import com.alibaba.smartfox.idea.common.util.getService
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
@@ -63,6 +64,7 @@ class P3cConfig : PersistentStateComponent<P3cConfig> {
 
     override fun loadState(state: P3cConfig) {
         XmlSerializerUtil.copyBean(state, this)
+        I18nResources.changeLanguage(locale)
     }
 
     companion object {
