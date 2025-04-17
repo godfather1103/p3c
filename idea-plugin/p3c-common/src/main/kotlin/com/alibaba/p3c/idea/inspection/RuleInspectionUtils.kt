@@ -15,11 +15,8 @@
  */
 package com.alibaba.p3c.idea.inspection
 
-import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.util.HighlightDisplayLevels
 import com.alibaba.p3c.idea.util.NumberConstants
-import com.alibaba.p3c.pmd.I18nResources
-import com.alibaba.smartfox.idea.common.util.getService
 import com.google.common.base.Joiner
 import com.google.common.collect.ImmutableMap
 import com.google.common.collect.Lists
@@ -66,7 +63,7 @@ object RuleInspectionUtils {
     private val displayLevelMap: Map<String, HighlightDisplayLevel>
 
     init {
-        I18nResources.changeLanguage(P3cConfig::class.java.getService().locale)
+//        I18nResources.changeLanguage(P3cConfig::class.java.getService().locale)
         val builder = ImmutableMap.builder<String, String>()
         val messageBuilder = ImmutableMap.builder<String, String>()
         val displayLevelBuilder = ImmutableMap.builder<String, HighlightDisplayLevel>()
