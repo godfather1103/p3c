@@ -16,9 +16,6 @@
 package com.alibaba.p3c.idea.quickfix
 
 import com.intellij.codeInspection.LocalQuickFix
-import com.intellij.openapi.actionSystem.ActionManager
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.psi.*
@@ -41,7 +38,7 @@ interface AliQuickFix : LocalQuickFix {
     companion object {
         const val groupName = "Ali QuickFix"
 
-        fun doQuickFixNew(
+        fun doQuickFix(
             newIdentifier: String,
             project: Project,
             psiIdentifier: PsiIdentifier
@@ -59,37 +56,6 @@ interface AliQuickFix : LocalQuickFix {
             commitDocumentIfNeeded(psiFile, project)
             val psiFacade = JavaPsiFacade.getInstance(project)
             val factory = psiFacade.elementFactory
-            psiFile.findElementAt(offset)?.replace(factory.createIdentifier(newIdentifier))
-        }
-
-        fun doQuickFix(newIdentifier: String, project: Project, psiIdentifier: PsiIdentifier) {
-            val offset = psiIdentifier.textOffset
-            val cannotFix = psiIdentifier.parent !is PsiMember
-                    && !(psiIdentifier.parent is PsiLocalVariable || psiIdentifier.parent is PsiParameter)
-            if (cannotFix) {
-                return
-            }
-
-            val editor = FileEditorManager.getInstance(project).selectedTextEditor ?: return
-            editor.caretModel.moveToOffset(psiIdentifier.textOffset)
-            val anAction = ActionManager.getInstance().getAction("RenameElement")
-            val psiFile = psiIdentifier.containingFile
-            commitDocumentIfNeeded(psiFile, project)
-            val event = AnActionEvent.createFromDataContext("MainMenu", anAction.templatePresentation) {
-                when (it) {
-                    CommonDataKeys.PROJECT.name -> project
-                    CommonDataKeys.EDITOR.name -> editor
-                    CommonDataKeys.PSI_FILE.name -> psiFile
-                    CommonDataKeys.PSI_ELEMENT.name -> psiIdentifier.parent
-                    else -> null
-                }
-            }
-            val psiFacade = JavaPsiFacade.getInstance(project)
-            val factory = psiFacade.elementFactory
-
-            anAction.actionPerformed(event)
-
-            // origin PsiIdentifier is unavailable
             psiFile.findElementAt(offset)?.replace(factory.createIdentifier(newIdentifier))
         }
 
