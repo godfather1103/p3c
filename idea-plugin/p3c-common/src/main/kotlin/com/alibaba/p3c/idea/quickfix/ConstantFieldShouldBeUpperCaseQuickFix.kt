@@ -44,7 +44,7 @@ object ConstantFieldShouldBeUpperCaseQuickFix : AliQuickFix {
             separateCamelCase(it).uppercase(Locale.getDefault())
         }
 
-        AliQuickFix.doQuickFixNew(resultName, project, psiIdentifier)
+        AliQuickFix.doQuickFix(resultName, project, psiIdentifier)
     }
 
     private fun separateCamelCase(name: String): String {

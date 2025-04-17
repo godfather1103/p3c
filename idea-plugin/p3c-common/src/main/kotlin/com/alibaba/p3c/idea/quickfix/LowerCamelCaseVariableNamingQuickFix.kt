@@ -41,7 +41,7 @@ object LowerCamelCaseVariableNamingQuickFix : AliQuickFix {
         val psiIdentifier = descriptor.psiElement as? PsiIdentifier ?: return
         val identifier = psiIdentifier.text
         val resultName = toLowerCamelCase(identifier)
-        AliQuickFix.doQuickFixNew(resultName, project, psiIdentifier)
+        AliQuickFix.doQuickFix(resultName, project, psiIdentifier)
     }
 
     private fun toLowerCamelCase(identifier: String): String {

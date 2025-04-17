@@ -44,6 +44,6 @@ object AvoidStartWithDollarAndUnderLineNamingQuickFix : AliQuickFix {
         if (resultName.toLongOrNull() != null) {
             return
         }
-        AliQuickFix.doQuickFixNew(resultName, project, psiIdentifier)
+        AliQuickFix.doQuickFix(resultName, project, psiIdentifier)
     }
 }
