@@ -1,6 +1,6 @@
 package io.github.godfather1103.settings
 
-import com.alibaba.p3c.idea.config.P3cConfig.Companion.getInstance
+import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.pmd.lang.java.util.namelist.NameListConfig
 import com.intellij.openapi.options.Configurable
 import io.github.godfather1103.service.BaseNameListServiceExt
@@ -27,13 +27,13 @@ class P3CSettingsConfigurable : Configurable {
     }
 
     override fun isModified(): Boolean {
-        return getInstance()
+        return P3cConfig.getInstance()
             .customNamelistProperties != mySettingsComponent.getInDataText()
     }
 
     override fun apply() {
-        val inData = mySettingsComponent.getInDataText();
-        getInstance().customNamelistProperties = inData
+        val inData = mySettingsComponent.getInDataText()
+        P3cConfig.getInstance().customNamelistProperties = inData
         val service = NameListConfig.NAME_LIST_SERVICE
         if (service is BaseNameListServiceExt) {
             if (service.oldData != inData) {
@@ -43,7 +43,7 @@ class P3CSettingsConfigurable : Configurable {
     }
 
     override fun reset() {
-        mySettingsComponent.setInDataText(getInstance().customNamelistProperties)
+        mySettingsComponent.setInDataText(P3cConfig.getInstance().customNamelistProperties)
     }
 
     override fun getDisplayName() = "P3C Configure"

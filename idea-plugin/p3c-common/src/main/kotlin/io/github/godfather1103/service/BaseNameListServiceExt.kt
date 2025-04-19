@@ -1,6 +1,5 @@
 package io.github.godfather1103.service
 
-import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.pmd.lang.java.util.namelist.NameListService
 import com.alibaba.p3c.pmd.lang.java.util.namelist.NameListServiceImpl
 import com.google.gson.Gson
@@ -34,13 +33,6 @@ abstract class BaseNameListServiceExt : NameListService {
     var oldData = ""
 
     private val logger = LoggerFactory.getLogger(BaseNameListServiceExt::class.java)
-
-    init {
-        resetData(
-            P3cConfig.getInstance()
-                .customNamelistProperties
-        )
-    }
 
     fun resetData(inDate: String, isReset: Boolean = false) {
         try {
