@@ -7,13 +7,15 @@ import com.alibaba.p3c.idea.service.FileListenerService
 import com.alibaba.p3c.idea.util.HighlightInfoTypes
 import com.alibaba.p3c.idea.util.HighlightSeverities
 import com.alibaba.p3c.pmd.I18nResources
+import com.alibaba.p3c.pmd.lang.java.util.namelist.NameListConfig
 import com.alibaba.smartfox.idea.common.util.getService
+import com.flag.Version
 import com.intellij.codeInsight.daemon.impl.SeverityRegistrar
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
 import com.intellij.openapi.startup.ProjectActivity
-import com.flag.Version
+import io.github.godfather1103.service.BaseNameListServiceExt
 
 class MyProjectStartupActivity : ProjectActivity, ProjectManagerListener {
 
@@ -23,6 +25,13 @@ class MyProjectStartupActivity : ProjectActivity, ProjectManagerListener {
         registerStandard()
         println("this is ${Version.version()}")
         I18nResources.changeLanguage(p3cConfig.locale)
+        val service = NameListConfig.NAME_LIST_SERVICE
+        if (service is BaseNameListServiceExt) {
+            val inData = p3cConfig.customNamelistProperties
+            if (service.oldData != inData) {
+                service.resetData(inData)
+            }
+        }
         val analyticsGroup = ActionManager.getInstance().getAction(analyticsGroupId)
         analyticsGroup.templatePresentation.text = P3cBundle.getMessage(analyticsGroupText)
         Inspections.addCustomTag(project, "date")
