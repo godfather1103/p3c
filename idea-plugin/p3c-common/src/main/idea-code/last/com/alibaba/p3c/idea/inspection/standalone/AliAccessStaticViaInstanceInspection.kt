@@ -19,7 +19,6 @@ import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.i18n.P3cBundle
 import com.alibaba.p3c.idea.inspection.AliBaseInspection
 import com.alibaba.p3c.idea.util.HighlightDisplayLevels
-import com.alibaba.smartfox.idea.common.util.getService
 import com.intellij.codeHighlighting.HighlightDisplayLevel
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightMessageUtil
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtil
@@ -66,8 +65,7 @@ class AliAccessStaticViaInstanceInspection(any: Any?) : AccessStaticViaInstance(
             val resultText = calcText(result.element as PsiMember, result.substitutor)
             private fun calcText(member: PsiMember, substitutor: PsiSubstitutor): String {
                 val aClass = member.containingClass ?: return ""
-                val p3cConfig = P3cConfig::class.java.getService()
-                return when (p3cConfig.locale) {
+                return when (P3cConfig.getInstance().locale) {
                     P3cConfig.localeZh -> String.format(
                         P3cBundle.getMessage(fixKey),
                         HighlightUtil.formatClass(aClass, false),

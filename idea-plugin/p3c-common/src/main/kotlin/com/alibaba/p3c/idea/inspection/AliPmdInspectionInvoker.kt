@@ -22,7 +22,6 @@ import com.alibaba.p3c.idea.util.DocumentUtils.calculateLineStart
 import com.alibaba.p3c.idea.util.DocumentUtils.calculateRealOffset
 import com.alibaba.p3c.idea.util.ProblemsUtils
 import com.alibaba.p3c.pmd.lang.java.rule.comment.RemoveCommentedCodeRule
-import com.alibaba.smartfox.idea.common.util.getService
 import com.beust.jcommander.internal.Lists
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
@@ -106,11 +105,6 @@ class AliPmdInspectionInvoker(
 
     companion object {
         private lateinit var invokers: Cache<FileRule, AliPmdInspectionInvoker>
-        val smartFoxConfig = P3cConfig::class.java.getService()
-
-        init {
-            reInitInvokers(smartFoxConfig.ruleCacheTime)
-        }
 
         fun invokeInspection(
             psiFile: PsiFile?, manager: InspectionManager, rule: Rule,
@@ -120,7 +114,7 @@ class AliPmdInspectionInvoker(
                 return null
             }
             val virtualFile = psiFile.virtualFile ?: return null
-            if (!smartFoxConfig.ruleCacheEnable) {
+            if (!P3cConfig.getInstance().ruleCacheEnable) {
                 val invoker = AliPmdInspectionInvoker(psiFile, manager, rule)
                 invoker.doInvoke(isOnTheFly)
                 return invoker.getRuleProblems(isOnTheFly)
@@ -150,10 +144,12 @@ class AliPmdInspectionInvoker(
         }
 
         fun reInitInvokers(expireTime: Long) {
-            invokers = CacheBuilder.newBuilder().maximumSize(500).expireAfterWrite(
-                expireTime,
-                TimeUnit.MILLISECONDS
-            ).build<FileRule, AliPmdInspectionInvoker>()!!
+            if (!::invokers.isInitialized) {
+                invokers = CacheBuilder.newBuilder().maximumSize(500).expireAfterWrite(
+                    expireTime,
+                    TimeUnit.MILLISECONDS
+                ).build()
+            }
         }
     }
 }

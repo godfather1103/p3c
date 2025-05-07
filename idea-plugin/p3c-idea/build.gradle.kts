@@ -38,7 +38,7 @@ tasks {
         changeNotes.set(
             """
         <ul>
-        2.0
+        2.1
         <li> fix <a href="https://github.com/godfather1103/p3c/issues/68">issues-68</a></li>
         </ul>
         """.trimIndent()
