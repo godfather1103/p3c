@@ -21,7 +21,6 @@ import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.inspection.AliBaseInspection
 import com.alibaba.p3c.idea.util.CheckinHandlerUtil
 import com.alibaba.smartfox.idea.common.util.BalloonNotifications
-import com.alibaba.smartfox.idea.common.util.getService
 import com.intellij.analysis.AnalysisScope
 import com.intellij.codeInspection.InspectionManager
 import com.intellij.codeInspection.LocalInspectionTool
@@ -99,7 +98,7 @@ class AliCodeAnalysisCheckinHandler(
     }
 
     private fun getSettings(): P3cConfig {
-        return P3cConfig::class.java.getService()
+        return P3cConfig.getInstance()
     }
 
     override fun beforeCheckin(

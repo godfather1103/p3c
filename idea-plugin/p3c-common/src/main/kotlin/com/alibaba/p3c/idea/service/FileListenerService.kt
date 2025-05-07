@@ -4,10 +4,11 @@ import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.inspection.AliPmdInspectionInvoker
 import com.alibaba.p3c.idea.pmd.SourceCodeProcessor
 import com.alibaba.p3c.idea.util.withLockNotInline
-import com.alibaba.smartfox.idea.common.util.getService
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.*
+import com.intellij.openapi.vfs.AsyncFileListener
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.openapi.vfs.newvfs.events.VFileContentChangeEvent
 import com.intellij.openapi.vfs.newvfs.events.VFileDeleteEvent
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
@@ -34,8 +35,6 @@ class FileListenerService(val project: Project) : IFileListenerService {
     private val writeLock = lock.writeLock()
 
     private val fileContexts = ConcurrentHashMap<String, FileContext>()
-
-    private val p3cConfig = P3cConfig::class.java.getService()
 
     init {
         asyncListener = AsyncFileListener {
@@ -103,6 +102,7 @@ class FileListenerService(val project: Project) : IFileListenerService {
     override fun contentsChanged(event: VFileContentChangeEvent) {
         val path = getFilePath(event) ?: return
         PsiManager.getInstance(project).findFile(event.file) ?: return
+        val p3cConfig = P3cConfig.getInstance()
         if (!p3cConfig.ruleCacheEnable) {
             AliPmdInspectionInvoker.refreshFileViolationsCache(event.file)
         }

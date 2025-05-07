@@ -19,7 +19,6 @@ import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.i18n.P3cBundle
 import com.alibaba.p3c.idea.inspection.AliBaseInspection
 import com.alibaba.p3c.idea.util.HighlightDisplayLevels
-import com.alibaba.smartfox.idea.common.util.getService
 import com.intellij.codeHighlighting.HighlightDisplayLevel
 import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemHighlightType
@@ -68,8 +67,7 @@ class AliDeprecationInspection(any: Any?) : DeprecationInspection(), AliBaseInsp
     }
 
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
-        val p3cConfig = P3cConfig::class.java.getService()
-        return when (p3cConfig.locale) {
+        return when (P3cConfig.getInstance().locale) {
             P3cConfig.localeEn -> super.buildVisitor(holder, isOnTheFly)
             else -> super.buildVisitor(DeprecationInspectionProblemsHolder(holder, isOnTheFly), isOnTheFly)
         }

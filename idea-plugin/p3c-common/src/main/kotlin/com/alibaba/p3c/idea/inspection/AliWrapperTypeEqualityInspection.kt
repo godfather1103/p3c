@@ -40,8 +40,6 @@ import org.jetbrains.annotations.NonNls
  */
 class AliWrapperTypeEqualityInspection(any: Any?) : BaseInspection(), AliBaseInspection {
 
-    private val familyName = "$replaceWith equals"
-
     override fun buildErrorString(vararg infos: Any?): String {
         return P3cBundle.getMessage("com.alibaba.p3c.idea.inspection.rule.WrapperTypeEqualityRule.errMsg")
     }
@@ -71,6 +69,8 @@ class AliWrapperTypeEqualityInspection(any: Any?) : BaseInspection(), AliBaseIns
     }
 
     public override fun buildFix(vararg infos: Any): InspectionGadgetsFix? {
+        val replaceWith = P3cBundle.getMessage("com.alibaba.p3c.idea.quickfix.replace.with")
+        val familyName = "$replaceWith equals"
         if (infos.isEmpty()) {
             return DecorateInspectionGadgetsFix(EqualityToEqualsFix(), familyName)
         }
@@ -118,10 +118,11 @@ class AliWrapperTypeEqualityInspection(any: Any?) : BaseInspection(), AliBaseIns
         InspectionGadgetsFix() {
 
         override fun getName(): String {
-            if (deepEquals) {
-                return "$replaceWith 'Arrays.deepEquals()'"
+            val replaceWith = P3cBundle.getMessage("com.alibaba.p3c.idea.quickfix.replace.with")
+            return if (deepEquals) {
+                "$replaceWith 'Arrays.deepEquals()'"
             } else {
-                return "$replaceWith 'Arrays.equals()'"
+                "$replaceWith 'Arrays.equals()'"
             }
         }
 
@@ -168,9 +169,5 @@ class AliWrapperTypeEqualityInspection(any: Any?) : BaseInspection(), AliBaseIns
             return buildFix()
         }
         return buildFix(lhsType)
-    }
-
-    companion object {
-        val replaceWith = P3cBundle.getMessage("com.alibaba.p3c.idea.quickfix.replace.with")
     }
 }

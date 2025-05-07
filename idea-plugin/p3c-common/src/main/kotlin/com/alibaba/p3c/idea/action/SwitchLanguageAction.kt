@@ -18,7 +18,6 @@ package com.alibaba.p3c.idea.action
 import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.i18n.P3cBundle
 import com.alibaba.smartfox.idea.common.util.BalloonNotifications
-import com.alibaba.smartfox.idea.common.util.getService
 import com.intellij.ide.actions.RestartIdeAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ex.ApplicationManagerEx
@@ -30,12 +29,11 @@ import com.intellij.openapi.application.ex.ApplicationManagerEx
  * @date 2017/06/20
  */
 class SwitchLanguageAction : RestartIdeAction() {
-    private val p3cConfig = P3cConfig::class.java.getService()
 
     private val textKey = "com.alibaba.p3c.action.switch_language.text"
 
     override fun actionPerformed(e: AnActionEvent) {
-        p3cConfig.toggleLanguage()
+        P3cConfig.getInstance().toggleLanguage()
         BalloonNotifications.showSuccessNotification(
             P3cBundle.getMessage("$textKey.success"), e.project,
             { notification, _ ->
@@ -47,6 +45,6 @@ class SwitchLanguageAction : RestartIdeAction() {
     }
 
     override fun update(e: AnActionEvent) {
-        e.presentation.text = P3cBundle.getMessage("$textKey.cur_${p3cConfig.locale}")
+        e.presentation.text = P3cBundle.getMessage("$textKey.cur_${P3cConfig.getInstance().locale}")
     }
 }

@@ -68,8 +68,8 @@ class P3cConfig : PersistentStateComponent<P3cConfig> {
     }
 
     companion object {
-        val localeEn = Locale.ENGLISH.language!!
-        val localeZh = Locale.CHINESE.language!!
+        val localeEn: String = Locale.ENGLISH.language
+        val localeZh: String = Locale.CHINESE.language
 
         @JvmStatic
         fun getInstance() = P3cConfig::class.java.getService()

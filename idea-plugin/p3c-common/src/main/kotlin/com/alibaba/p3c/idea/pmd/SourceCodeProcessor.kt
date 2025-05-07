@@ -8,7 +8,6 @@ import com.alibaba.p3c.idea.config.P3cConfig
 import com.alibaba.p3c.idea.service.FileListenerService
 import com.alibaba.p3c.idea.util.withLockNotInline
 import com.alibaba.p3c.idea.util.withTryLock
-import com.alibaba.smartfox.idea.common.util.getService
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import com.intellij.openapi.diagnostic.Logger
@@ -24,7 +23,6 @@ import net.sourceforge.pmd.lang.ast.Node
 import net.sourceforge.pmd.lang.ast.ParseException
 import java.io.Reader
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeUnit.MILLISECONDS
 
 class SourceCodeProcessor(
     private val configuration: PMDConfiguration,
@@ -79,6 +77,7 @@ class SourceCodeProcessor(
     }
 
     private fun getRootNode(sourceCode: Reader, ruleSets: RuleSets, ctx: RuleContext): Node? {
+        val smartFoxConfig = P3cConfig.getInstance()
         if (!smartFoxConfig.astCacheEnable) {
             return parseNode(ctx, ruleSets, sourceCode)
         }
@@ -98,7 +97,7 @@ class SourceCodeProcessor(
             getNode(ctx.sourceCodeFilename, isOnTheFly)
         }
         val cacheNode = if (isOnTheFly) {
-            readLock.withTryLock(50, MILLISECONDS, readAction)
+            readLock.withTryLock(50, TimeUnit.MILLISECONDS, readAction)
         } else {
             val start = System.currentTimeMillis()
             LOG.info("rule:$ruleName,file:$fileName require read lock")
@@ -126,7 +125,7 @@ class SourceCodeProcessor(
             }
         }
         return if (isOnTheFly) {
-            writeLock.withTryLock(50, MILLISECONDS, writeAction)!!
+            writeLock.withTryLock(50, TimeUnit.MILLISECONDS, writeAction)!!
         } else {
             writeLock.withLockNotInline(
                 writeAction
@@ -226,25 +225,25 @@ class SourceCodeProcessor(
     }
 
     companion object {
-        val smartFoxConfig = P3cConfig::class.java.getService()
         private lateinit var onlyTheFlyCache: Cache<String, Node>
         private lateinit var userTriggerNodeCache: Cache<String, Node>
         private val LOG = Logger.getInstance(SourceCodeProcessor::class.java)
 
-        init {
-            reInitNodeCache(smartFoxConfig.astCacheTime)
-        }
 
         fun reInitNodeCache(expireTime: Long) {
-            onlyTheFlyCache = CacheBuilder.newBuilder().concurrencyLevel(16)
-                .expireAfterWrite(expireTime, TimeUnit.MILLISECONDS)
-                .maximumSize(300)
-                .build<String, Node>()!!
+            if (!::onlyTheFlyCache.isInitialized) {
+                onlyTheFlyCache = CacheBuilder.newBuilder().concurrencyLevel(16)
+                    .expireAfterWrite(expireTime, TimeUnit.MILLISECONDS)
+                    .maximumSize(300)
+                    .build()
+            }
 
-            userTriggerNodeCache = CacheBuilder.newBuilder().concurrencyLevel(16)
-                .expireAfterWrite(10, TimeUnit.MINUTES)
-                .maximumSize(300)
-                .build<String, Node>()!!
+            if (!::userTriggerNodeCache.isInitialized) {
+                userTriggerNodeCache = CacheBuilder.newBuilder().concurrencyLevel(16)
+                    .expireAfterWrite(10, TimeUnit.MINUTES)
+                    .maximumSize(300)
+                    .build()
+            }
         }
 
         fun invalidateCache(file: String) {
