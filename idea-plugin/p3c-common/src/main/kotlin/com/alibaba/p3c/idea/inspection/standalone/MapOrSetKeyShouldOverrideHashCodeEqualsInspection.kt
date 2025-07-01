@@ -171,7 +171,7 @@ class MapOrSetKeyShouldOverrideHashCodeEqualsInspection(any: Any?) : BaseInspect
             }
             val psiClass = psiType.resolve() ?: return false
             val skip = psiClass.containingFile == null || psiClass is PsiTypeParameter
-                    || psiClass.isEnum || psiClass.isInterface
+                    || psiClass.isEnum || psiClass.isInterface || psiClass.isRecord
                     || psiClass.containingFile.fileType !is JavaFileType
                     || psiClass.qualifiedName?.startsWith(skipJdkPackageJava) ?: false
                     || psiClass.qualifiedName?.startsWith(skipJdkPackageJavax) ?: false
