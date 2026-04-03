@@ -32,13 +32,7 @@ val noVersion = if (first < 2000) first % 10 else ideaVersion
     .substring(ideaVersion.indexOf(".") + 1)
     .toInt()
 
-val myPlugins = when (yearVersion) {
-    in 26..Int.MAX_VALUE -> listOf("com.intellij.java", "Git4Idea")
-    in 23..25 -> listOf("java", "vcs-git")
-    22 -> if (noVersion == 3) listOf("vcs-git", "java") else listOf("git4idea", "java")
-    in 19..21 -> listOf("git4idea", "java")
-    else -> listOf("git4idea")
-}
+val myPlugins = listOf("com.intellij.java", "Git4Idea")
 
 ext["ideaVersion"] = ideaVersion
 ext["yearVersion"] = yearVersion
