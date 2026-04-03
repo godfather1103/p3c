@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.intellij")
+    id("org.jetbrains.intellij.platform")
     id("signing")
 }
 
@@ -12,8 +12,16 @@ java {
     withSourcesJar()
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+    }
+}
+
 val ideaVersion = rootProject.ext.get("ideaVersion") as String
-val myPlugins = rootProject.ext.get("myPlugins") as Set<*>
+val myPlugins = rootProject.ext.get("myPlugins") as List<*>
 val yearVersion = rootProject.ext.get("yearVersion") as Int
 val noVersion = rootProject.ext.get("noVersion") as Int
 if (yearVersion <= 22) {
@@ -42,12 +50,14 @@ if (yearVersion <= 22) {
     }
 }
 
-intellij {
-    version.set(ideaVersion)
-    plugins.set(myPlugins)
-    pluginName.set("${property("plugin_name")}")
-    updateSinceUntilBuild.set(false)
-    sandboxDir.set("${project.buildDir}/idea-sandbox/${ideaVersion}")
+intellijPlatform {
+    pluginConfiguration {
+        ideaVersion {
+            sinceBuild = "${yearVersion}${noVersion}.0"
+        }
+        name.set("${property("plugin_name")}")
+    }
+    sandboxContainer.set(file("${project.projectDir}/idea-sandbox/${ideaVersion}"))
 }
 
 version = "2.0.1"
@@ -56,18 +66,22 @@ ext["isReleaseVersion"] = !version.toString().endsWith("SNAPSHOT")
 
 dependencies {
     implementation("org.freemarker:freemarker:2.3.25-incubating")
-//    implementation("com.alibaba.p3c:p3c-pmd:${property("p3c_pmd_version")}")
     implementation(project(":p3c-pmd"))
     implementation("org.javassist:javassist:3.21.0-GA")
+    intellijPlatform {
+        intellijIdea(ideaVersion)
+        bundledPlugins(myPlugins.map { it.toString() })
+        testFramework(org.jetbrains.intellij.platform.gradle.TestFrameworkType.Platform)
+    }
 }
 
 publishing {
     repositories {
         maven {
-            if (!version.toString().toUpperCase().contains("SNAPSHOT")) {
-                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+            url = if (!version.toString().uppercase().contains("SNAPSHOT")) {
+                uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
             } else {
-                url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+                uri("https://oss.sonatype.org/content/repositories/snapshots/")
             }
             credentials {
                 findProperty("ossrhUsername")?.let {
@@ -129,6 +143,3 @@ signing {
     sign(publishing.publications["mavenJava"])
 }
 
-tasks.initializeIntelliJPlugin {
-    offline.set(true)
-}
