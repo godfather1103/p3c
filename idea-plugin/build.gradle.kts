@@ -16,7 +16,7 @@ buildscript {
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${property("kotlin_version")}")
-        classpath("org.jetbrains.intellij.plugins:gradle-intellij-plugin:${property("gradle_jetbrains_version")}")
+        classpath("org.jetbrains.intellij.platform:org.jetbrains.intellij.platform.gradle.plugin:${property("gradle_jetbrains_version")}")
     }
 }
 
@@ -33,10 +33,11 @@ val noVersion = if (first < 2000) first % 10 else ideaVersion
     .toInt()
 
 val myPlugins = when (yearVersion) {
-    in 23..Int.MAX_VALUE -> setOf("vcs-git", "java")
-    22 -> if (noVersion == 3) setOf("vcs-git", "java") else setOf("git4idea", "java")
-    in 19..21 -> setOf("git4idea", "java")
-    else -> setOf("git4idea")
+    in 26..Int.MAX_VALUE -> listOf("com.intellij.java", "Git4Idea")
+    in 23..25 -> listOf("java", "vcs-git")
+    22 -> if (noVersion == 3) listOf("vcs-git", "java") else listOf("git4idea", "java")
+    in 19..21 -> listOf("git4idea", "java")
+    else -> listOf("git4idea")
 }
 
 ext["ideaVersion"] = ideaVersion
@@ -78,6 +79,6 @@ subprojects {
     }
 
     dependencies {
-        testImplementation("junit:junit:4.11")
+        testImplementation("junit:junit:4.13.2")
     }
 }

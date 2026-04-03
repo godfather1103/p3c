@@ -92,3 +92,5 @@ hsf.configuration/
 *.instance
 out
 **/idea-sandbox
+
+.intellijPlatform
