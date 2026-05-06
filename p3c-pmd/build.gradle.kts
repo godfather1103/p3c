@@ -19,6 +19,7 @@ repositories {
 dependencies {
     api("net.sourceforge.pmd:pmd-java:${property("pmd.version")}")
     api("net.sourceforge.pmd:pmd-vm:${property("pmd.version")}")
+    api("org.ow2.asm:asm-commons:${property("asm.version")}")
     api("javax.annotation:javax.annotation-api:1.3.2")
     testImplementation("net.sourceforge.pmd:pmd-test:${property("pmd.version")}")
     testImplementation("commons-io:commons-io:2.11.0")
@@ -40,7 +41,7 @@ publishing {
         maven {
             val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-            url = if (version.toString().toUpperCase().contains("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+            url = if (version.toString().uppercase().contains("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
             credentials {
                 username = "${property("ossrhUsername")}"
                 password = "${property("ossrhPassword")}"
