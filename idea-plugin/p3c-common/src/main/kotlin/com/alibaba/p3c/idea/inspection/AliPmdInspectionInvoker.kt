@@ -94,11 +94,15 @@ class AliPmdInspectionInvoker(
             } else {
                 "${rv.description} (line ${rv.beginLine})"
             }
-            val problemDescriptor = ProblemsUtils.createProblemDescriptorForPmdRule(
-                psiFile, manager,
-                isOnTheFly, rv.rule.name, errorMessage, offsets.start, offsets.end, rv.beginLine
-            ) ?: continue
-            problemDescriptors.add(problemDescriptor)
+            try {
+                val problemDescriptor = ProblemsUtils.createProblemDescriptorForPmdRule(
+                    psiFile, manager,
+                    isOnTheFly, rv.rule.name, errorMessage, offsets.start, offsets.end, rv.beginLine
+                ) ?: continue
+                problemDescriptors.add(problemDescriptor)
+            } catch (e: Exception) {
+                logger.error(e)
+            }
         }
         return problemDescriptors.toTypedArray()
     }
