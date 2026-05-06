@@ -56,8 +56,8 @@ Alibaba Java Coding Guidelines plugin
         changeNotes.set(
             """
         <ul>
-        2.2
-        <li> fix <a href="https://github.com/godfather1103/p3c/issues/72">issues-72</a></li>
+        2.3
+        <li>升级asm依赖</li>
         </ul>
         """.trimIndent()
         )
